@@ -1,0 +1,2742 @@
+package models
+
+import (
+	"time"
+)
+
+// ACTIVOFIJO representa la tabla ACTIVOFIJO de la base de datos
+type ACTIVOFIJO struct {
+	ConsecutivoPeriodo             int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	CodigoGrupoActivoFijo          int        `gorm:"column:CodigoGrupoActivoFijo"`
+	CodigoAuxiliar                 string     `gorm:"column:CodigoAuxiliar;primaryKey"`
+	Descripcion                    string     `gorm:"column:Descripcion"`
+	FechaAdquisicion               *time.Time `gorm:"column:FechaAdquisicion"`
+	CostoAdquisicion               *float64   `gorm:"column:CostoAdquisicion"`
+	DepreciacionContable           *float64   `gorm:"column:DepreciacionContable"`
+	DepreciacionContableAno        *float64   `gorm:"column:DepreciacionContableAno"`
+	VidaUtilEnMeses                *int       `gorm:"column:VidaUtilEnMeses"`
+	ValordeRescate                 *float64   `gorm:"column:ValordeRescate"`
+	FechaInicioUso                 *time.Time `gorm:"column:FechaInicioUso"`
+	Retirado                       string     `gorm:"column:Retirado"`
+	FechaRetiro                    *time.Time `gorm:"column:FechaRetiro"`
+	MotivoRetiro                   *string    `gorm:"column:MotivoRetiro"`
+	TipoReclasificacion            *string    `gorm:"column:TipoReclasificacion"`
+	PrecioDeVentaEnajenacion       *float64   `gorm:"column:PrecioDeVentaEnajenacion"`
+	CalculoManual                  string     `gorm:"column:CalculoManual"`
+	VieneDelAnoAnterior            string     `gorm:"column:VieneDelAnoAnterior"`
+	Contabilizado                  string     `gorm:"column:Contabilizado"`
+	NroComprobante                 *string    `gorm:"column:NroComprobante"`
+	CuentaDeMovimientoAsociada     string     `gorm:"column:CuentaDeMovimientoAsociada;primaryKey"`
+	IngresadoDesdeCompApertura     string     `gorm:"column:IngresadoDesdeCompApertura"`
+	IngresadoPorCargaInicial       string     `gorm:"column:IngresadoPorCargaInicial"`
+	CentroDeCostos                 *string    `gorm:"column:CentroDeCostos"`
+	NroComprobanteDelRetiro        *string    `gorm:"column:NroComprobanteDelRetiro"`
+	CodigoAuxiliarOrigenDelRetiro  *string    `gorm:"column:CodigoAuxiliarOrigenDelRetiro"`
+	FechaAvaluo                    *time.Time `gorm:"column:FechaAvaluo"`
+	CostoCorriente                 *float64   `gorm:"column:CostoCorriente"`
+	DepreciacionContableNIIF       *float64   `gorm:"column:DepreciacionContableNIIF"`
+	DepreciacionContableAnoNIIF    *float64   `gorm:"column:DepreciacionContableAnoNIIF"`
+	VidaUtilNIIF                   *int       `gorm:"column:VidaUtilNIIF"`
+	EsRevaluado                    string     `gorm:"column:EsRevaluado"`
+	ValorRescateNIIF               *float64   `gorm:"column:ValorRescateNIIF"`
+	NroComprobanteDeRevalorizacion *string    `gorm:"column:NroComprobanteDeRevalorizacion"`
+	NombreOperador                 *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion        *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                   time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ACTIVOFIJO) TableName() string {
+	return "ACTIVOFIJO"
+}
+
+// alicuotaIVA representa la tabla alicuotaIVA de la base de datos
+type alicuotaIVA struct {
+	FechaDeInicioDeVigencia time.Time `gorm:"column:FechaDeInicioDeVigencia;primaryKey"`
+	MontoAlicuotaGeneral    *float64  `gorm:"column:MontoAlicuotaGeneral"`
+	MontoAlicuota2          *float64  `gorm:"column:MontoAlicuota2"`
+	MontoAlicuota3          *float64  `gorm:"column:MontoAlicuota3"`
+	PorcentajePasajeAereo   *float64  `gorm:"column:PorcentajePasajeAereo"`
+	FldTimeStamp            time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (alicuotaIVA) TableName() string {
+	return "alicuotaIVA"
+}
+
+// anticipo representa la tabla anticipo de la base de datos
+type anticipo struct {
+	ConsecutivoCompania         int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoAnticipo         int        `gorm:"column:ConsecutivoAnticipo;primaryKey"`
+	Status                      *string    `gorm:"column:Status"`
+	Tipo                        *string    `gorm:"column:Tipo"`
+	Fecha                       *time.Time `gorm:"column:Fecha"`
+	Numero                      *string    `gorm:"column:Numero"`
+	CodigoCliente               *string    `gorm:"column:CodigoCliente"`
+	CodigoProveedor             *string    `gorm:"column:CodigoProveedor"`
+	CodigoBeneficiario          string     `gorm:"column:CodigoBeneficiario"`
+	NombreBeneficiario          *string    `gorm:"column:NombreBeneficiario"`
+	Moneda                      *string    `gorm:"column:Moneda"`
+	Cambio                      *float64   `gorm:"column:Cambio"`
+	GeneraMovBancario           string     `gorm:"column:GeneraMovBancario"`
+	CodigoCuentaBancaria        *string    `gorm:"column:CodigoCuentaBancaria"`
+	CodigoConceptoBancario      *string    `gorm:"column:CodigoConceptoBancario"`
+	GeneraImpuestoBancario      string     `gorm:"column:GeneraImpuestoBancario"`
+	FechaAnulacion              *time.Time `gorm:"column:FechaAnulacion"`
+	FechaCancelacion            *time.Time `gorm:"column:FechaCancelacion"`
+	FechaDevolucion             *time.Time `gorm:"column:FechaDevolucion"`
+	Descripcion                 *string    `gorm:"column:Descripcion"`
+	MontoTotal                  *float64   `gorm:"column:MontoTotal"`
+	MontoUsado                  *float64   `gorm:"column:MontoUsado"`
+	MontoDevuelto               *float64   `gorm:"column:MontoDevuelto"`
+	MontoDiferenciaEnDevolucion *float64   `gorm:"column:MontoDiferenciaEnDevolucion"`
+	DiferenciaEsIdb             string     `gorm:"column:DiferenciaEsIdb"`
+	EsUnaDevolucion             string     `gorm:"column:EsUnaDevolucion"`
+	NumeroDelAnticipoDevuelto   *int       `gorm:"column:NumeroDelAnticipoDevuelto"`
+	NumeroCheque                *string    `gorm:"column:NumeroCheque"`
+	AsociarAnticipoACotiz       string     `gorm:"column:AsociarAnticipoACotiz"`
+	NumeroCotizacion            *string    `gorm:"column:NumeroCotizacion"`
+	CodigoMoneda                string     `gorm:"column:CodigoMoneda"`
+	ConsecutivoRendicion        *int       `gorm:"column:ConsecutivoRendicion"`
+	NombreOperador              *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion     *time.Time `gorm:"column:FechaUltimaModificacion"`
+	AsociarAnticipoACaja        string     `gorm:"column:AsociarAnticipoACaja"`
+	ConsecutivoCaja             *int       `gorm:"column:ConsecutivoCaja"`
+	Generadopor                 string     `gorm:"column:Generadopor"`
+	NumeroDeCobranzaAsociado    *string    `gorm:"column:NumeroDeCobranzaAsociado"`
+	FldTimeStamp                time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (anticipo) TableName() string {
+	return "anticipo"
+}
+
+// anticipoCobrado representa la tabla anticipoCobrado de la base de datos
+type anticipoCobrado struct {
+	ConsecutivoCompania         int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroCobranza              string    `gorm:"column:NumeroCobranza;primaryKey"`
+	Secuencial                  int       `gorm:"column:Secuencial;primaryKey"`
+	ConsecutivoAnticipoUsado    int       `gorm:"column:ConsecutivoAnticipoUsado"`
+	NumeroAnticipo              *string   `gorm:"column:NumeroAnticipo"`
+	MontoOriginal               *float64  `gorm:"column:MontoOriginal"`
+	MontoRestanteAlDia          *float64  `gorm:"column:MontoRestanteAlDia"`
+	SimboloMoneda               *string   `gorm:"column:SimboloMoneda"`
+	CodigoMoneda                *string   `gorm:"column:CodigoMoneda"`
+	Cambio                      *float64  `gorm:"column:Cambio"`
+	MontoTotalDelAnticipo       *float64  `gorm:"column:MontoTotalDelAnticipo"`
+	MontoAplicado               *float64  `gorm:"column:MontoAplicado"`
+	MontoAplicadoMonedaOriginal *float64  `gorm:"column:MontoAplicadoMonedaOriginal"`
+	CambioAMonedaLocal          *float64  `gorm:"column:CambioAMonedaLocal"`
+	SimboloMonedaDelAbono       *string   `gorm:"column:SimboloMonedaDelAbono"`
+	FldTimeStamp                time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (anticipoCobrado) TableName() string {
+	return "anticipoCobrado"
+}
+
+// anticipoPagado representa la tabla anticipoPagado de la base de datos
+type anticipoPagado struct {
+	ConsecutivoCompania      int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroComprobante        int       `gorm:"column:NumeroComprobante;primaryKey"`
+	Secuencial               int       `gorm:"column:Secuencial;primaryKey"`
+	ConsecutivoAnticipoUsado int       `gorm:"column:ConsecutivoAnticipoUsado"`
+	NumeroAnticipo           *string   `gorm:"column:NumeroAnticipo"`
+	MontoOriginal            *float64  `gorm:"column:MontoOriginal"`
+	MontoRestanteAlDia       *float64  `gorm:"column:MontoRestanteAlDia"`
+	SimboloMoneda            *string   `gorm:"column:SimboloMoneda"`
+	CodigoMoneda             *string   `gorm:"column:CodigoMoneda"`
+	Cambio                   *float64  `gorm:"column:Cambio"`
+	MontoTotalDelAnticipo    *float64  `gorm:"column:MontoTotalDelAnticipo"`
+	MontoAplicado            *float64  `gorm:"column:MontoAplicado"`
+	FldTimeStamp             time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (anticipoPagado) TableName() string {
+	return "anticipoPagado"
+}
+
+// ARCV representa la tabla ARCV de la base de datos
+type ARCV struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                  string     `gorm:"column:Numero;primaryKey"`
+	FechaDesde              time.Time  `gorm:"column:FechaDesde"`
+	FechaHasta              time.Time  `gorm:"column:FechaHasta"`
+	CodigoProveedor         string     `gorm:"column:CodigoProveedor"`
+	TotalPagadoAbonado      *float64   `gorm:"column:TotalPagadoAbonado"`
+	TotalBaseImponible      *float64   `gorm:"column:TotalBaseImponible"`
+	TotalImpuestoRetenido   *float64   `gorm:"column:TotalImpuestoRetenido"`
+	CodigoMoneda            string     `gorm:"column:CodigoMoneda"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ARCV) TableName() string {
+	return "ARCV"
+}
+
+// ArticuloInventario representa la tabla ArticuloInventario de la base de datos
+type ArticuloInventario struct {
+	ConsecutivoCompania       int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Codigo                    string     `gorm:"column:Codigo;primaryKey"`
+	Descripcion               string     `gorm:"column:Descripcion"`
+	LineaDeProducto           *string    `gorm:"column:LineaDeProducto"`
+	StatusdelArticulo         *string    `gorm:"column:StatusdelArticulo"`
+	TipoDeArticulo            *string    `gorm:"column:TipoDeArticulo"`
+	AlicuotaIva               *string    `gorm:"column:AlicuotaIva"`
+	PrecioSinIva              *float64   `gorm:"column:PrecioSinIva"`
+	PrecioConIva              *float64   `gorm:"column:PrecioConIva"`
+	PrecioSinIva2             *float64   `gorm:"column:PrecioSinIva2"`
+	PrecioConIva2             *float64   `gorm:"column:PrecioConIva2"`
+	PrecioSinIva3             *float64   `gorm:"column:PrecioSinIva3"`
+	PrecioConIva3             *float64   `gorm:"column:PrecioConIva3"`
+	PrecioSinIva4             *float64   `gorm:"column:PrecioSinIva4"`
+	PrecioConIva4             *float64   `gorm:"column:PrecioConIva4"`
+	PorcentajeBaseImponible   *float64   `gorm:"column:PorcentajeBaseImponible"`
+	CostoUnitario             *float64   `gorm:"column:CostoUnitario"`
+	Existencia                *float64   `gorm:"column:Existencia"`
+	CantidadMinima            *float64   `gorm:"column:CantidadMinima"`
+	CantidadMaxima            *float64   `gorm:"column:CantidadMaxima"`
+	Categoria                 *string    `gorm:"column:Categoria"`
+	TipoDeProducto            *string    `gorm:"column:TipoDeProducto"`
+	NombrePrograma            *string    `gorm:"column:NombrePrograma"`
+	Marca                     *string    `gorm:"column:Marca"`
+	FechaDeVencimiento        *time.Time `gorm:"column:FechaDeVencimiento"`
+	UnidadDeVenta             *string    `gorm:"column:UnidadDeVenta"`
+	CampoDefinible1           *string    `gorm:"column:CampoDefinible1"`
+	CampoDefinible2           *string    `gorm:"column:CampoDefinible2"`
+	CampoDefinible3           *string    `gorm:"column:CampoDefinible3"`
+	CampoDefinible4           *string    `gorm:"column:CampoDefinible4"`
+	CampoDefinible5           *string    `gorm:"column:CampoDefinible5"`
+	MeCostoUnitario           *float64   `gorm:"column:MeCostoUnitario"`
+	UnidadDeVentaSecundaria   *float64   `gorm:"column:UnidadDeVentaSecundaria"`
+	CuentaContableIngreso     *string    `gorm:"column:CuentaContableIngreso"`
+	CodigoLote                *string    `gorm:"column:CodigoLote"`
+	PorcentajeComision        *float64   `gorm:"column:PorcentajeComision"`
+	ExcluirDeComision         string     `gorm:"column:ExcluirDeComision"`
+	CantArtReservado          *float64   `gorm:"column:CantArtReservado"`
+	CodigoGrupo               *string    `gorm:"column:CodigoGrupo"`
+	MargenGanancia            *float64   `gorm:"column:MargenGanancia"`
+	MargenGanancia2           *float64   `gorm:"column:MargenGanancia2"`
+	MargenGanancia3           *float64   `gorm:"column:MargenGanancia3"`
+	MargenGanancia4           *float64   `gorm:"column:MargenGanancia4"`
+	TipoArticuloInv           string     `gorm:"column:TipoArticuloInv"`
+	CostoPromedio             *float64   `gorm:"column:CostoPromedio"`
+	FechaCierreActualizada    *time.Time `gorm:"column:FechaCierreActualizada"`
+	RecalcularCierre          string     `gorm:"column:RecalcularCierre"`
+	ComisionaPorcentaje       string     `gorm:"column:ComisionaPorcentaje"`
+	RecalcularCosto           string     `gorm:"column:RecalcularCosto"`
+	CuentaCostoDeVenta        *string    `gorm:"column:CuentaCostoDeVenta"`
+	CuentaInventario          *string    `gorm:"column:CuentaInventario"`
+	GastosAdmisibles          *float64   `gorm:"column:GastosAdmisibles"`
+	MargenGananciaXLey        *float64   `gorm:"column:MargenGananciaXLey"`
+	MargenGananciaXLey2       *float64   `gorm:"column:MargenGananciaXLey2"`
+	MargenGananciaXLey3       *float64   `gorm:"column:MargenGananciaXLey3"`
+	MargenGananciaXLey4       *float64   `gorm:"column:MargenGananciaXLey4"`
+	Peso                      *float64   `gorm:"column:Peso"`
+	ArancelesCodigo           *string    `gorm:"column:ArancelesCodigo"`
+	TipoDeMercanciaProduccion *string    `gorm:"column:TipoDeMercanciaProduccion"`
+	UsaBalanza                *string    `gorm:"column:UsaBalanza"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ArticuloInventario) TableName() string {
+	return "ArticuloInventario"
+}
+
+// ASIENTO representa la tabla ASIENTO de la base de datos
+type ASIENTO struct {
+	ConsecutivoPeriodo           int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	ConsecutivoAsiento           int        `gorm:"column:ConsecutivoAsiento;primaryKey"`
+	NumeroComprobante            string     `gorm:"column:NumeroComprobante;primaryKey"`
+	FechaComprobante             *time.Time `gorm:"column:FechaComprobante"`
+	CodigoCuenta                 *string    `gorm:"column:CodigoCuenta"`
+	MontoDebe                    *float64   `gorm:"column:MontoDebe"`
+	MontoHaber                   *float64   `gorm:"column:MontoHaber"`
+	Descripcion                  *string    `gorm:"column:Descripcion"`
+	FechaDeReferencia            *time.Time `gorm:"column:FechaDeReferencia"`
+	NumeroReferencia             *string    `gorm:"column:NumeroReferencia"`
+	CentroDeCostos               *string    `gorm:"column:CentroDeCostos"`
+	Auxiliar                     *string    `gorm:"column:Auxiliar"`
+	ConciliadoSn                 string     `gorm:"column:ConciliadoSn"`
+	FechaEnQueSeConcilio         *time.Time `gorm:"column:FechaEnQueSeConcilio"`
+	NroConciliacion              *string    `gorm:"column:NroConciliacion"`
+	Contabilizado                string     `gorm:"column:Contabilizado"`
+	AfectaEfectivo               string     `gorm:"column:AfectaEfectivo"`
+	EsAsientoDeActivoFijo        string     `gorm:"column:EsAsientoDeActivoFijo"`
+	TipoDeAsiento                *string    `gorm:"column:TipoDeAsiento"`
+	FldTimeStamp                 time.Time  `gorm:"column:fldTimeStamp"`
+	EsAsientoDiferenciaCambiaria bool       `gorm:"column:EsAsientoDiferenciaCambiaria"`
+	TasaDeCambio                 *float64   `gorm:"column:TasaDeCambio"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ASIENTO) TableName() string {
+	return "ASIENTO"
+}
+
+// AsientoSaldoInicial representa la tabla AsientoSaldoInicial de la base de datos
+type AsientoSaldoInicial struct {
+	ConsecutivoPeriodo    int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	ConsecutivoAsiento    int        `gorm:"column:ConsecutivoAsiento;primaryKey"`
+	NumeroComprobante     string     `gorm:"column:NumeroComprobante;primaryKey"`
+	FechaComprobante      *time.Time `gorm:"column:FechaComprobante"`
+	CodigoCuenta          *string    `gorm:"column:CodigoCuenta"`
+	MontoDebe             *float64   `gorm:"column:MontoDebe"`
+	MontoHaber            *float64   `gorm:"column:MontoHaber"`
+	Descripcion           *string    `gorm:"column:Descripcion"`
+	FechaDeReferencia     *time.Time `gorm:"column:FechaDeReferencia"`
+	NumeroReferencia      *string    `gorm:"column:NumeroReferencia"`
+	CentroDeCostos        *string    `gorm:"column:CentroDeCostos"`
+	Auxiliar              *string    `gorm:"column:Auxiliar"`
+	ConciliadoSn          string     `gorm:"column:ConciliadoSn"`
+	FechaEnQueSeConcilio  *time.Time `gorm:"column:FechaEnQueSeConcilio"`
+	NroConciliacion       *string    `gorm:"column:NroConciliacion"`
+	Contabilizado         string     `gorm:"column:Contabilizado"`
+	AfectaEfectivo        string     `gorm:"column:AfectaEfectivo"`
+	EsAsientoDeActivoFijo string     `gorm:"column:EsAsientoDeActivoFijo"`
+	TipoDeAsiento         *string    `gorm:"column:TipoDeAsiento"`
+	FldTimeStamp          time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (AsientoSaldoInicial) TableName() string {
+	return "AsientoSaldoInicial"
+}
+
+// auditoriaComprobante representa la tabla auditoriaComprobante de la base de datos
+type auditoriaComprobante struct {
+	ConsecutivoPeriodo              int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	Consecutivo                     int        `gorm:"column:Consecutivo;primaryKey"`
+	NumeroComprobante               *string    `gorm:"column:NumeroComprobante"`
+	NroComprobanteDespuesDelProceso *string    `gorm:"column:NroComprobanteDespuesDelProceso"`
+	FechaComprobante                *time.Time `gorm:"column:FechaComprobante"`
+	GeneradoPor                     *string    `gorm:"column:GeneradoPor"`
+	Status                          *string    `gorm:"column:Status"`
+	TipoDeOperacion                 *string    `gorm:"column:TipoDeOperacion"`
+	NroAsientos                     *int       `gorm:"column:NroAsientos"`
+	NombreOperador                  *string    `gorm:"column:NombreOperador"`
+	FechaDelProceso                 *time.Time `gorm:"column:FechaDelProceso"`
+	HoraDelProceso                  *string    `gorm:"column:HoraDelProceso"`
+	FldTimeStamp                    time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (auditoriaComprobante) TableName() string {
+	return "auditoriaComprobante"
+}
+
+// auditoriaDeProcesos representa la tabla auditoriaDeProcesos de la base de datos
+type auditoriaDeProcesos struct {
+	Consecutivo                  int        `gorm:"column:Consecutivo;primaryKey"`
+	NombreCompania               *string    `gorm:"column:NombreCompania"`
+	NombreTabla                  *string    `gorm:"column:NombreTabla"`
+	TipoDeOperacion              *string    `gorm:"column:TipoDeOperacion"`
+	CantidadDeRegistrosAfectados *int       `gorm:"column:CantidadDeRegistrosAfectados"`
+	InformacionAdicionalUno      *string    `gorm:"column:InformacionAdicionalUno"`
+	InformacionAdicionalDos      *string    `gorm:"column:InformacionAdicionalDos"`
+	ParametrosDeSesionActivos    *string    `gorm:"column:ParametrosDeSesionActivos"`
+	ParametrosDelIniActivos      *string    `gorm:"column:ParametrosDelIniActivos"`
+	NombreOperador               *string    `gorm:"column:NombreOperador"`
+	FechaDelProceso              *time.Time `gorm:"column:FechaDelProceso"`
+	HoraDelProceso               *string    `gorm:"column:HoraDelProceso"`
+	VersionDelPrograma           *string    `gorm:"column:VersionDelPrograma"`
+	FldTimeStamp                 time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (auditoriaDeProcesos) TableName() string {
+	return "auditoriaDeProcesos"
+}
+
+// AumInfoProperty representa la tabla AumInfoProperty de la base de datos
+type AumInfoProperty struct {
+	Auf1         interface{} `gorm:"column:auf1;primaryKey"`
+	Auf1         interface{} `gorm:"column:auf1;primaryKey"`
+	Auf2         string      `gorm:"column:auf2"`
+	Auf2         string      `gorm:"column:auf2"`
+	Auf3         string      `gorm:"column:auf3"`
+	Auf3         string      `gorm:"column:auf3"`
+	Auf4         *time.Time  `gorm:"column:auf4"`
+	Auf4         *time.Time  `gorm:"column:auf4"`
+	FldTimeStamp time.Time   `gorm:"column:fldTimeStamp"`
+	FldTimeStamp time.Time   `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (AumInfoProperty) TableName() string {
+	return "AumInfoProperty"
+}
+
+// camposDefCotizacion representa la tabla camposDefCotizacion de la base de datos
+type camposDefCotizacion struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroCotizacion    string    `gorm:"column:NumeroCotizacion;primaryKey"`
+	CampoDefinible1     *string   `gorm:"column:CampoDefinible1"`
+	CampoDefinible2     *string   `gorm:"column:CampoDefinible2"`
+	CampoDefinible3     *string   `gorm:"column:CampoDefinible3"`
+	CampoDefinible4     *string   `gorm:"column:CampoDefinible4"`
+	CampoDefinible5     *string   `gorm:"column:CampoDefinible5"`
+	CampoDefinible6     *string   `gorm:"column:CampoDefinible6"`
+	CampoDefinible7     *string   `gorm:"column:CampoDefinible7"`
+	CampoDefinible8     *string   `gorm:"column:CampoDefinible8"`
+	CampoDefinible9     *string   `gorm:"column:CampoDefinible9"`
+	CampoDefinible10    *string   `gorm:"column:CampoDefinible10"`
+	CampoDefinible11    *string   `gorm:"column:CampoDefinible11"`
+	CampoDefinible12    *string   `gorm:"column:CampoDefinible12"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (camposDefCotizacion) TableName() string {
+	return "camposDefCotizacion"
+}
+
+// camposDefFactura representa la tabla camposDefFactura de la base de datos
+type camposDefFactura struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroFactura       string    `gorm:"column:NumeroFactura;primaryKey"`
+	TipoDeDocumento     string    `gorm:"column:TipoDeDocumento;primaryKey"`
+	CampoDefinible1     *string   `gorm:"column:CampoDefinible1"`
+	CampoDefinible2     *string   `gorm:"column:CampoDefinible2"`
+	CampoDefinible3     *string   `gorm:"column:CampoDefinible3"`
+	CampoDefinible4     *string   `gorm:"column:CampoDefinible4"`
+	CampoDefinible5     *string   `gorm:"column:CampoDefinible5"`
+	CampoDefinible6     *string   `gorm:"column:CampoDefinible6"`
+	CampoDefinible7     *string   `gorm:"column:CampoDefinible7"`
+	CampoDefinible8     *string   `gorm:"column:CampoDefinible8"`
+	CampoDefinible9     *string   `gorm:"column:CampoDefinible9"`
+	CampoDefinible10    *string   `gorm:"column:CampoDefinible10"`
+	CampoDefinible11    *string   `gorm:"column:CampoDefinible11"`
+	CampoDefinible12    *string   `gorm:"column:CampoDefinible12"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (camposDefFactura) TableName() string {
+	return "camposDefFactura"
+}
+
+// CamposMonedaExtranjera representa la tabla CamposMonedaExtranjera de la base de datos
+type CamposMonedaExtranjera struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Codigo                  string     `gorm:"column:Codigo;primaryKey"`
+	MePrecioSinIva          *float64   `gorm:"column:MePrecioSinIva"`
+	MePrecioConIva          *float64   `gorm:"column:MePrecioConIva"`
+	MePrecioSinIva2         *float64   `gorm:"column:MePrecioSinIva2"`
+	MePrecioConIva2         *float64   `gorm:"column:MePrecioConIva2"`
+	MePrecioSinIva3         *float64   `gorm:"column:MePrecioSinIva3"`
+	MePrecioConIva3         *float64   `gorm:"column:MePrecioConIva3"`
+	MePrecioSinIva4         *float64   `gorm:"column:MePrecioSinIva4"`
+	MePrecioConIva4         *float64   `gorm:"column:MePrecioConIva4"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (CamposMonedaExtranjera) TableName() string {
+	return "CamposMonedaExtranjera"
+}
+
+// ChequeDeMovBancario representa la tabla ChequeDeMovBancario de la base de datos
+type ChequeDeMovBancario struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoMovimiento   int        `gorm:"column:ConsecutivoMovimiento;primaryKey"`
+	Beneficiario            *string    `gorm:"column:Beneficiario"`
+	NumeroDeCheque          *string    `gorm:"column:NumeroDeCheque"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ChequeDeMovBancario) TableName() string {
+	return "ChequeDeMovBancario"
+}
+
+// Cliente representa la tabla Cliente de la base de datos
+type Cliente struct {
+	ConsecutivoCompania         int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Consecutivo                 int        `gorm:"column:Consecutivo"`
+	Codigo                      string     `gorm:"column:Codigo;primaryKey"`
+	Nombre                      string     `gorm:"column:Nombre"`
+	NumeroRIF                   *string    `gorm:"column:NumeroRIF"`
+	NumeroNit                   *string    `gorm:"column:NumeroNit"`
+	Direccion                   *string    `gorm:"column:Direccion"`
+	Ciudad                      *string    `gorm:"column:Ciudad"`
+	ZonaPostal                  *string    `gorm:"column:ZonaPostal"`
+	Telefono                    *string    `gorm:"column:Telefono"`
+	Fax                         *string    `gorm:"column:Fax"`
+	Status                      *string    `gorm:"column:Status"`
+	Contacto                    *string    `gorm:"column:Contacto"`
+	ZonaDeCobranza              *string    `gorm:"column:ZonaDeCobranza"`
+	CodigoVendedor              *string    `gorm:"column:CodigoVendedor"`
+	RazonInactividad            *string    `gorm:"column:RazonInactividad"`
+	Email                       *string    `gorm:"column:Email"`
+	ActivarAvisoAlEscoger       string     `gorm:"column:ActivarAvisoAlEscoger"`
+	TextoDelAviso               *string    `gorm:"column:TextoDelAviso"`
+	CuentaContableCxc           *string    `gorm:"column:CuentaContableCxc"`
+	CuentaContableIngresos      *string    `gorm:"column:CuentaContableIngresos"`
+	CuentaContableAnticipo      *string    `gorm:"column:CuentaContableAnticipo"`
+	InfoGalac                   *string    `gorm:"column:InfoGalac"`
+	SectorDeNegocio             *string    `gorm:"column:SectorDeNegocio"`
+	CodigoLote                  *string    `gorm:"column:CodigoLote"`
+	NivelDePrecio               *string    `gorm:"column:NivelDePrecio"`
+	Origen                      *string    `gorm:"column:Origen"`
+	DiaCumpleanos               *int       `gorm:"column:DiaCumpleanos"`
+	MesCumpleanos               *int       `gorm:"column:MesCumpleanos"`
+	CorrespondenciaXenviar      string     `gorm:"column:CorrespondenciaXenviar"`
+	EsExtranjero                string     `gorm:"column:EsExtranjero"`
+	ClienteDesdeFecha           *time.Time `gorm:"column:ClienteDesdeFecha"`
+	AQueSeDedicaElCliente       *string    `gorm:"column:AQueSeDedicaElCliente"`
+	NombreOperador              *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion     *time.Time `gorm:"column:FechaUltimaModificacion"`
+	TipoDocumentoIdentificacion *string    `gorm:"column:TipoDocumentoIdentificacion"`
+	TipoDeContribuyente         *string    `gorm:"column:TipoDeContribuyente"`
+	CampoDefinible1             *string    `gorm:"column:CampoDefinible1"`
+	FldTimeStamp                time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor         int        `gorm:"column:ConsecutivoVendedor"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Cliente) TableName() string {
+	return "Cliente"
+}
+
+// Cobranza representa la tabla Cobranza de la base de datos
+type Cobranza struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                  string     `gorm:"column:Numero;primaryKey"`
+	StatusCobranza          string     `gorm:"column:StatusCobranza"`
+	Fecha                   time.Time  `gorm:"column:Fecha"`
+	FechaAnulacion          *time.Time `gorm:"column:FechaAnulacion"`
+	CodigoCliente           *string    `gorm:"column:CodigoCliente"`
+	CodigoCobrador          *string    `gorm:"column:CodigoCobrador"`
+	TotalDocumentos         *float64   `gorm:"column:TotalDocumentos"`
+	RetencionIslr           *float64   `gorm:"column:RetencionIslr"`
+	TotalCobrado            *float64   `gorm:"column:TotalCobrado"`
+	CobradoEfectivo         *float64   `gorm:"column:CobradoEfectivo"`
+	CobradoCheque           *float64   `gorm:"column:CobradoCheque"`
+	NumerodelCheque         *string    `gorm:"column:NumerodelCheque"`
+	CobradoTarjeta          *float64   `gorm:"column:CobradoTarjeta"`
+	CualTarjeta             *string    `gorm:"column:CualTarjeta"`
+	NroDeLaTarjeta          *string    `gorm:"column:NroDeLaTarjeta"`
+	Origen                  *string    `gorm:"column:Origen"`
+	TotalOtros              *float64   `gorm:"column:TotalOtros"`
+	NombreBanco             *string    `gorm:"column:NombreBanco"`
+	CodigoCuentaBancaria    *string    `gorm:"column:CodigoCuentaBancaria"`
+	CodigoConcepto          *string    `gorm:"column:CodigoConcepto"`
+	Moneda                  *string    `gorm:"column:Moneda"`
+	CambioAbolivares        *float64   `gorm:"column:CambioAbolivares"`
+	RetencionIva            *float64   `gorm:"column:RetencionIva"`
+	NroComprobanteRetIva    *string    `gorm:"column:NroComprobanteRetIva"`
+	StatusRetencionIva      *string    `gorm:"column:StatusRetencionIva"`
+	GeneraMovBancario       string     `gorm:"column:GeneraMovBancario"`
+	CobradoAnticipo         *float64   `gorm:"column:CobradoAnticipo"`
+	Vuelto                  *float64   `gorm:"column:Vuelto"`
+	DescProntoPago          *float64   `gorm:"column:DescProntoPago"`
+	DescProntoPagoPorc      *float64   `gorm:"column:DescProntoPagoPorc"`
+	ComisionVendedor        *float64   `gorm:"column:ComisionVendedor"`
+	AplicaCreditoBancario   string     `gorm:"column:AplicaCreditoBancario"`
+	CodigoMoneda            string     `gorm:"column:CodigoMoneda"`
+	TipoDeDocumento         string     `gorm:"column:TipoDeDocumento"`
+	NumeroDeComprobanteISLR *int       `gorm:"column:NumeroDeComprobanteISLR"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoCobrador     int        `gorm:"column:ConsecutivoCobrador"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Cobranza) TableName() string {
+	return "Cobranza"
+}
+
+// comisionCobranzaXVcto representa la tabla comisionCobranzaXVcto de la base de datos
+type comisionCobranzaXVcto struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoComision     int        `gorm:"column:ConsecutivoComision;primaryKey"`
+	PorcentajeComision      float64    `gorm:"column:PorcentajeComision;primaryKey"`
+	DiasVencidos            string     `gorm:"column:DiasVencidos;primaryKey"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (comisionCobranzaXVcto) TableName() string {
+	return "comisionCobranzaXVcto"
+}
+
+// COMPANIA representa la tabla COMPANIA de la base de datos
+type COMPANIA struct {
+	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Codigo                            string     `gorm:"column:Codigo"`
+	Nombre                            string     `gorm:"column:Nombre"`
+	NumeroDeRif                       *string    `gorm:"column:NumeroDeRif"`
+	NumeroNit                         *string    `gorm:"column:NumeroNit"`
+	TipoDeContribuyente               *string    `gorm:"column:TipoDeContribuyente"`
+	Direccion                         *string    `gorm:"column:Direccion"`
+	Ciudad                            string     `gorm:"column:Ciudad"`
+	Estado                            *string    `gorm:"column:Estado"`
+	ZonaPostal                        *string    `gorm:"column:ZonaPostal"`
+	Telefono1                         *string    `gorm:"column:Telefono1"`
+	Telefono2                         *string    `gorm:"column:Telefono2"`
+	Telefono3                         *string    `gorm:"column:Telefono3"`
+	CodArea1                          *string    `gorm:"column:CodArea1"`
+	CodArea2                          *string    `gorm:"column:CodArea2"`
+	CodArea3                          *string    `gorm:"column:CodArea3"`
+	Fax                               *string    `gorm:"column:Fax"`
+	CodAreafax                        *string    `gorm:"column:CodAreafax"`
+	FechaConversion                   *time.Time `gorm:"column:FechaConversion"`
+	CompaniaConvertida                string     `gorm:"column:CompaniaConvertida"`
+	UsaModuloDeActivoFijo             string     `gorm:"column:UsaModuloDeActivoFijo"`
+	UsaConexionConIslr                string     `gorm:"column:UsaConexionConIslr"`
+	UsaConexionConAxi                 string     `gorm:"column:UsaConexionConAxi"`
+	UsaCentroDeCostos                 string     `gorm:"column:UsaCentroDeCostos"`
+	UsaCostoDeVentas                  string     `gorm:"column:UsaCostoDeVentas"`
+	UsaAuxiliares                     string     `gorm:"column:UsaAuxiliares"`
+	UsaModuloDeContabilidad           string     `gorm:"column:UsaModuloDeContabilidad"`
+	EsCatalogoGeneral                 string     `gorm:"column:EsCatalogoGeneral"`
+	TipoDeContribuyenteIva            *string    `gorm:"column:TipoDeContribuyenteIva"`
+	TablaCiiu                         string     `gorm:"column:TablaCiiu"`
+	CodigoCiiu                        string     `gorm:"column:CodigoCiiu"`
+	PorcentajeDePatente               *float64   `gorm:"column:PorcentajeDePatente"`
+	PersonaFiscal                     *string    `gorm:"column:PersonaFiscal"`
+	Pais                              *string    `gorm:"column:Pais"`
+	CodigoPais                        string     `gorm:"column:CodigoPais"`
+	EsAgenteDeRetencionIVA            string     `gorm:"column:EsAgenteDeRetencionIVA"`
+	S10Ids                            *string    `gorm:"column:S10Ids"`
+	UsaS10                            *string    `gorm:"column:UsaS10"`
+	TipoDocumentoIdentificacion       *string    `gorm:"column:TipoDocumentoIdentificacion"`
+	EstaIntegradaConNomina            string     `gorm:"column:EstaIntegradaConNomina"`
+	CodigoDeIntegracion               *string    `gorm:"column:CodigoDeIntegracion"`
+	ConsecutivoMunicipio              int        `gorm:"column:ConsecutivoMunicipio"`
+	CodigoContribuyente               *string    `gorm:"column:CodigoContribuyente"`
+	CodigoMoneda                      *string    `gorm:"column:CodigoMoneda"`
+	StatusCompania                    string     `gorm:"column:StatusCompania"`
+	StatusMonetaryReconversionProcess string     `gorm:"column:StatusMonetaryReconversionProcess"`
+	NombreOperador                    *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion           *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                      time.Time  `gorm:"column:fldTimeStamp"`
+	ConectadaConG360                  string     `gorm:"column:ConectadaConG360"`
+	UsaInformesFinancieros            string     `gorm:"column:UsaInformesFinancieros"`
+	ImprentaDigitalUrl                *string    `gorm:"column:ImprentaDigitalUrl"`
+	ImprentaDigitalNombreCampoUsuario *string    `gorm:"column:ImprentaDigitalNombreCampoUsuario"`
+	ImprentaDigitalNombreCampoClave   *string    `gorm:"column:ImprentaDigitalNombreCampoClave"`
+	ImprentaDigitalUsuario            *string    `gorm:"column:ImprentaDigitalUsuario"`
+	ImprentaDigitalClave              *string    `gorm:"column:ImprentaDigitalClave"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (COMPANIA) TableName() string {
+	return "COMPANIA"
+}
+
+// CompaniaDefCuentaFlujoEfectivo representa la tabla CompaniaDefCuentaFlujoEfectivo de la base de datos
+type CompaniaDefCuentaFlujoEfectivo struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoRenglon      int        `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoCuenta            string     `gorm:"column:CodigoCuenta"`
+	ActividadFlujoEfectivo  string     `gorm:"column:ActividadFlujoEfectivo"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (CompaniaDefCuentaFlujoEfectivo) TableName() string {
+	return "CompaniaDefCuentaFlujoEfectivo"
+}
+
+// companyInfoProperty representa la tabla companyInfoProperty de la base de datos
+type companyInfoProperty struct {
+	Field1       string    `gorm:"column:field1;primaryKey"`
+	FldTimeStamp time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (companyInfoProperty) TableName() string {
+	return "companyInfoProperty"
+}
+
+// COMPROBANTE representa la tabla COMPROBANTE de la base de datos
+type COMPROBANTE struct {
+	ConsecutivoPeriodo        int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	ConsecutivoDocOrigen      int        `gorm:"column:ConsecutivoDocOrigen"`
+	Numero                    string     `gorm:"column:Numero;primaryKey"`
+	Status                    *string    `gorm:"column:Status"`
+	Fecha                     *time.Time `gorm:"column:Fecha"`
+	Descripcion               *string    `gorm:"column:Descripcion"`
+	TotalDebe                 *float64   `gorm:"column:TotalDebe"`
+	TotalHaber                *float64   `gorm:"column:TotalHaber"`
+	TipoAsientoModificable    *string    `gorm:"column:TipoAsientoModificable"`
+	GeneradoPor               *string    `gorm:"column:GeneradoPor"`
+	NumeroDeLote              *int       `gorm:"column:NumeroDeLote"`
+	NoDocumentoOrigen         *string    `gorm:"column:NoDocumentoOrigen"`
+	FueModificado             string     `gorm:"column:FueModificado"`
+	VieneDeConversionInfo2000 string     `gorm:"column:VieneDeConversionInfo2000"`
+	EsComprobanteNiif         string     `gorm:"column:EsComprobanteNiif"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (COMPROBANTE) TableName() string {
+	return "COMPROBANTE"
+}
+
+// comprobanteRetencionIVA representa la tabla comprobanteRetencionIVA de la base de datos
+type comprobanteRetencionIVA struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                  string     `gorm:"column:Numero;primaryKey"`
+	Fecha                   time.Time  `gorm:"column:Fecha;primaryKey"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (comprobanteRetencionIVA) TableName() string {
+	return "comprobanteRetencionIVA"
+}
+
+// ComprobanteSaldoInicial representa la tabla ComprobanteSaldoInicial de la base de datos
+type ComprobanteSaldoInicial struct {
+	ConsecutivoPeriodo        int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	ConsecutivoDocOrigen      int        `gorm:"column:ConsecutivoDocOrigen"`
+	Numero                    string     `gorm:"column:Numero;primaryKey"`
+	Status                    *string    `gorm:"column:Status"`
+	Fecha                     *time.Time `gorm:"column:Fecha"`
+	Descripcion               *string    `gorm:"column:Descripcion"`
+	TotalDebe                 *float64   `gorm:"column:TotalDebe"`
+	TotalHaber                *float64   `gorm:"column:TotalHaber"`
+	TipoAsientoModificable    *string    `gorm:"column:TipoAsientoModificable"`
+	GeneradoPor               *string    `gorm:"column:GeneradoPor"`
+	NumeroDeLote              *int       `gorm:"column:NumeroDeLote"`
+	NoDocumentoOrigen         *string    `gorm:"column:NoDocumentoOrigen"`
+	FueModificado             string     `gorm:"column:FueModificado"`
+	VieneDeConversionInfo2000 string     `gorm:"column:VieneDeConversionInfo2000"`
+	EsComprobanteNiif         string     `gorm:"column:EsComprobanteNiif"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ComprobanteSaldoInicial) TableName() string {
+	return "ComprobanteSaldoInicial"
+}
+
+// Conciliacion representa la tabla Conciliacion de la base de datos
+type Conciliacion struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NroConciliacion         string     `gorm:"column:NroConciliacion;primaryKey"`
+	CodigoCuenta            string     `gorm:"column:CodigoCuenta"`
+	MesDeAplicacion         *int       `gorm:"column:MesDeAplicacion"`
+	AnoDeAplicacion         *int       `gorm:"column:AnoDeAplicacion"`
+	SaldoEdoCuentaBancario  *float64   `gorm:"column:SaldoEdoCuentaBancario"`
+	Status                  *string    `gorm:"column:Status"`
+	TotalDebe               *float64   `gorm:"column:TotalDebe"`
+	TotalHaber              *float64   `gorm:"column:TotalHaber"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Conciliacion) TableName() string {
+	return "Conciliacion"
+}
+
+// ConteoFisico representa la tabla ConteoFisico de la base de datos
+type ConteoFisico struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoConteo       int        `gorm:"column:ConsecutivoConteo;primaryKey"`
+	Fecha                   time.Time  `gorm:"column:Fecha"`
+	CodigoAlmacen           *string    `gorm:"column:CodigoAlmacen"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	SoloUnaLinea            string     `gorm:"column:SoloUnaLinea"`
+	LineaDeProducto         *string    `gorm:"column:LineaDeProducto"`
+	Status                  *string    `gorm:"column:Status"`
+	ConsecutivoAlmacen      int        `gorm:"column:ConsecutivoAlmacen"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ConteoFisico) TableName() string {
+	return "ConteoFisico"
+}
+
+// Contrato representa la tabla Contrato de la base de datos
+type Contrato struct {
+	ConsecutivoCompania      int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroContrato           string     `gorm:"column:NumeroContrato;primaryKey"`
+	StatusContrato           *string    `gorm:"column:StatusContrato"`
+	CodigoCliente            *string    `gorm:"column:CodigoCliente"`
+	ConsecutivoCliente       int        `gorm:"column:ConsecutivoCliente"`
+	DuracionDelContrato      *string    `gorm:"column:DuracionDelContrato"`
+	FechaDeInicio            *time.Time `gorm:"column:FechaDeInicio"`
+	FechaFinal               *time.Time `gorm:"column:FechaFinal"`
+	Observaciones            *string    `gorm:"column:Observaciones"`
+	CodigoMoneda             string     `gorm:"column:CodigoMoneda"`
+	NombreOperador           *string    `gorm:"column:NombreOperador"`
+	CodigoVendedor           *string    `gorm:"column:CodigoVendedor"`
+	NombreVendedor           *string    `gorm:"column:NombreVendedor"`
+	Moneda                   *string    `gorm:"column:Moneda"`
+	FacturarAOtroCliente     string     `gorm:"column:FacturarAOtroCliente"`
+	CodigoClienteAFacturar   *string    `gorm:"column:CodigoClienteAFacturar"`
+	NombreClienteAFacturar   *string    `gorm:"column:NombreClienteAFacturar"`
+	ContratoFueModificado    string     `gorm:"column:ContratoFueModificado"`
+	ContratoFueModificadoPor *string    `gorm:"column:ContratoFueModificadoPor"`
+	FechaUltimaModificacion  *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp             time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor      int        `gorm:"column:ConsecutivoVendedor"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Contrato) TableName() string {
+	return "Contrato"
+}
+
+// ControlDespacho representa la tabla ControlDespacho de la base de datos
+type ControlDespacho struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                  string     `gorm:"column:Numero;primaryKey"`
+	NumeroCotizacion        string     `gorm:"column:NumeroCotizacion"`
+	CodigoCliente           string     `gorm:"column:CodigoCliente"`
+	FechaApertura           *time.Time `gorm:"column:FechaApertura"`
+	FechaCierre             *time.Time `gorm:"column:FechaCierre"`
+	StatusControl           *string    `gorm:"column:StatusControl"`
+	Observaciones           *string    `gorm:"column:Observaciones"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ControlDespacho) TableName() string {
+	return "ControlDespacho"
+}
+
+// cotizacion representa la tabla cotizacion de la base de datos
+type cotizacion struct {
+	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                            string     `gorm:"column:Numero;primaryKey"`
+	Fecha                             time.Time  `gorm:"column:Fecha"`
+	CodigoCliente                     *string    `gorm:"column:CodigoCliente"`
+	CodigoVendedor                    *string    `gorm:"column:CodigoVendedor"`
+	Observaciones                     *string    `gorm:"column:Observaciones"`
+	TotalMontoExento                  *float64   `gorm:"column:TotalMontoExento"`
+	TotalBaseImponible                *float64   `gorm:"column:TotalBaseImponible"`
+	TotalRenglones                    *float64   `gorm:"column:TotalRenglones"`
+	TotalIVA                          *float64   `gorm:"column:TotalIVA"`
+	TotalCotizacion                   *float64   `gorm:"column:TotalCotizacion"`
+	PorcentajeDescuento               *float64   `gorm:"column:PorcentajeDescuento"`
+	CodigoNota1                       *string    `gorm:"column:CodigoNota1"`
+	CodigoNota2                       *string    `gorm:"column:CodigoNota2"`
+	Moneda                            *string    `gorm:"column:Moneda"`
+	NivelDePrecio                     *string    `gorm:"column:NivelDePrecio"`
+	ReservarMercancia                 string     `gorm:"column:ReservarMercancia"`
+	FechaDeRetiro                     *time.Time `gorm:"column:FechaDeRetiro"`
+	PorcentajeIVA                     *float64   `gorm:"column:PorcentajeIVA"`
+	Contacto                          *string    `gorm:"column:Contacto"`
+	UsarDireccionFiscal               string     `gorm:"column:UsarDireccionFiscal"`
+	NoDirDespachoAimprimir            *int       `gorm:"column:NoDirDespachoAimprimir"`
+	Promocion                         string     `gorm:"column:promocion"`
+	Confirmada                        string     `gorm:"column:Confirmada"`
+	ModificadoPorOperador             *string    `gorm:"column:ModificadoPorOperador"`
+	Seguimiento                       *string    `gorm:"column:Seguimiento"`
+	FechaDeProximaLlamada             *time.Time `gorm:"column:FechaDeProximaLlamada"`
+	EstadoDeLaCotizacion              *string    `gorm:"column:EstadoDeLaCotizacion"`
+	FormaDeEnvio                      *string    `gorm:"column:FormaDeEnvio"`
+	FechaDeUltimaEmisionDeFax         *time.Time `gorm:"column:FechaDeUltimaEmisionDeFax"`
+	NumeroDeVecesFaxeado              *int       `gorm:"column:NumeroDeVecesFaxeado"`
+	CambioABolivares                  *float64   `gorm:"column:CambioABolivares"`
+	CambioMostrarTotalEnDivisas       float64    `gorm:"column:CambioMostrarTotalEnDivisas"`
+	AplicaDecretoIvaEspecial          string     `gorm:"column:AplicaDecretoIvaEspecial"`
+	GeneradaPorNotaEntrega            *string    `gorm:"column:GeneradaPorNotaEntrega"`
+	EmitidaEnFacturaNumero            *string    `gorm:"column:EmitidaEnFacturaNumero"`
+	CodigoMoneda                      string     `gorm:"column:CodigoMoneda"`
+	NombreOperador                    *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion           *time.Time `gorm:"column:FechaUltimaModificacion"`
+	NumeroParaResumen                 *int       `gorm:"column:NumeroParaResumen"`
+	NroDiasMantenerCambioAMonedaLocal *int       `gorm:"column:NroDiasMantenerCambioAMonedaLocal"`
+	FechaLimiteCambioAMonedaLocal     *time.Time `gorm:"column:FechaLimiteCambioAMonedaLocal"`
+	FldTimeStamp                      time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor               int        `gorm:"column:ConsecutivoVendedor"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (cotizacion) TableName() string {
+	return "cotizacion"
+}
+
+// CUENTA representa la tabla CUENTA de la base de datos
+type CUENTA struct {
+	ConsecutivoPeriodo                int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	Codigo                            string     `gorm:"column:Codigo;primaryKey"`
+	Descripcion                       string     `gorm:"column:Descripcion"`
+	NaturalezaDeLaCuenta              *string    `gorm:"column:NaturalezaDeLaCuenta"`
+	TieneSubCuentas                   string     `gorm:"column:TieneSubCuentas"`
+	TieneAuxiliar                     string     `gorm:"column:TieneAuxiliar"`
+	GrupoAuxiliar                     *string    `gorm:"column:GrupoAuxiliar"`
+	VieneDelPeriodoAnterior           string     `gorm:"column:VieneDelPeriodoAnterior"`
+	StatusCuenta                      *string    `gorm:"column:StatusCuenta"`
+	MetAjusteYactivoStr               *string    `gorm:"column:MetAjusteYactivoStr"`
+	TipoDeInventario                  *string    `gorm:"column:TipoDeInventario"`
+	SeccionEstadoDemostrativo         *string    `gorm:"column:SeccionEstadoDemostrativo"`
+	CostoDeVentas                     *string    `gorm:"column:CostoDeVentas"`
+	Gastos                            *string    `gorm:"column:Gastos"`
+	IngresosPropiosActividad          *string    `gorm:"column:IngresosPropiosActividad"`
+	ConciliacionInfo2000              *string    `gorm:"column:ConciliacionInfo2000"`
+	EsActivoFijo                      string     `gorm:"column:EsActivoFijo"`
+	SaldoInicial                      *float64   `gorm:"column:SaldoInicial"`
+	NombreOperador                    *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion           *time.Time `gorm:"column:FechaUltimaModificacion"`
+	CodigoGrupoActivo                 *int       `gorm:"column:CodigoGrupoActivo"`
+	TipoDeCuentaFiscal                *string    `gorm:"column:TipoDeCuentaFiscal"`
+	TipoDeCuentaDpc10                 *string    `gorm:"column:TipoDeCuentaDpc10"`
+	Dpc10MetodoAjuste                 *string    `gorm:"column:Dpc10MetodoAjuste"`
+	MetodoAjuste                      *string    `gorm:"column:MetodoAjuste"`
+	DpcCodigoGrupoActivoFijo          *int       `gorm:"column:DpcCodigoGrupoActivoFijo"`
+	CodigoGrupoAjustaPorIpc           *int       `gorm:"column:CodigoGrupoAjustaPorIpc"`
+	TipoDeOtrasNoMonetarias           *string    `gorm:"column:TipoDeOtrasNoMonetarias"`
+	TipoRefleja                       *string    `gorm:"column:TipoRefleja"`
+	CuentaReflejaAlDebe               *string    `gorm:"column:CuentaReflejaAlDebe"`
+	CuentaReflejaAlHaber              *string    `gorm:"column:CuentaReflejaAlHaber"`
+	CodigoNiif                        string     `gorm:"column:CodigoNiif"`
+	TipoCuentaParaCosto               string     `gorm:"column:TipoCuentaParaCosto"`
+	ConsecutivoCriterioDeDistribucion int        `gorm:"column:ConsecutivoCriterioDeDistribucion"`
+	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania"`
+	ConsecutivoElementoDelCosto       int        `gorm:"column:ConsecutivoElementoDelCosto"`
+	FldTimeStamp                      time.Time  `gorm:"column:fldTimeStamp"`
+	EsMonedaExtranjera                string     `gorm:"column:EsMonedaExtranjera"`
+	CodigoMoneda                      string     `gorm:"column:CodigoMoneda"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (CUENTA) TableName() string {
+	return "CUENTA"
+}
+
+// CxC representa la tabla CxC de la base de datos
+type CxC struct {
+	ConsecutivoCompania           int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                        string     `gorm:"column:Numero;primaryKey"`
+	Status                        *string    `gorm:"column:Status"`
+	TipoCxc                       string     `gorm:"column:TipoCxc;primaryKey"`
+	CodigoCliente                 *string    `gorm:"column:CodigoCliente"`
+	CodigoVendedor                *string    `gorm:"column:CodigoVendedor"`
+	Origen                        *string    `gorm:"column:Origen"`
+	Fecha                         *time.Time `gorm:"column:Fecha"`
+	FechaCancelacion              *time.Time `gorm:"column:FechaCancelacion"`
+	FechaVencimiento              *time.Time `gorm:"column:FechaVencimiento"`
+	FechaAnulacion                *time.Time `gorm:"column:FechaAnulacion"`
+	MontoExento                   *float64   `gorm:"column:MontoExento"`
+	MontoGravado                  *float64   `gorm:"column:MontoGravado"`
+	MontoIva                      *float64   `gorm:"column:MontoIva"`
+	MontoAbonado                  *float64   `gorm:"column:MontoAbonado"`
+	Descripcion                   *string    `gorm:"column:Descripcion"`
+	Moneda                        *string    `gorm:"column:Moneda"`
+	CambioAbolivares              *float64   `gorm:"column:CambioAbolivares"`
+	CodigoCc                      *string    `gorm:"column:CodigoCc"`
+	CentroDeCostos                *string    `gorm:"column:CentroDeCostos"`
+	SeRetuvoIva                   string     `gorm:"column:SeRetuvoIva"`
+	NumeroDocumentoOrigen         *string    `gorm:"column:NumeroDocumentoOrigen"`
+	RefinanciadoSn                *string    `gorm:"column:RefinanciadoSn"`
+	NoAplicaParaLibroDeVentas     string     `gorm:"column:NoAplicaParaLibroDeVentas"`
+	CodigoLote                    *string    `gorm:"column:CodigoLote"`
+	CodigoMoneda                  string     `gorm:"column:CodigoMoneda"`
+	NumeroControl                 *string    `gorm:"column:NumeroControl"`
+	NumeroComprobanteFiscal       *string    `gorm:"column:NumeroComprobanteFiscal"`
+	FechaLimiteCambioAMonedaLocal *time.Time `gorm:"column:FechaLimiteCambioAMonedaLocal"`
+	NombreOperador                *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion       *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                  time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor           int        `gorm:"column:ConsecutivoVendedor"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (CxC) TableName() string {
+	return "CxC"
+}
+
+// cxP representa la tabla cxP de la base de datos
+type cxP struct {
+	ConsecutivoCompania                int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoCxp                     int        `gorm:"column:ConsecutivoCxp;primaryKey"`
+	Numero                             string     `gorm:"column:Numero"`
+	TipoDeCxp                          *string    `gorm:"column:TipoDeCxp"`
+	Status                             *string    `gorm:"column:Status"`
+	CodigoProveedor                    string     `gorm:"column:CodigoProveedor"`
+	Fecha                              *time.Time `gorm:"column:Fecha"`
+	FechaCancelacion                   *time.Time `gorm:"column:FechaCancelacion"`
+	FechaVencimiento                   *time.Time `gorm:"column:FechaVencimiento"`
+	FechaAnulacion                     *time.Time `gorm:"column:FechaAnulacion"`
+	Moneda                             *string    `gorm:"column:Moneda"`
+	CambioAbolivares                   *float64   `gorm:"column:CambioAbolivares"`
+	AplicaParaLibrodeCompras           string     `gorm:"column:AplicaParaLibrodeCompras"`
+	MontoExento                        *float64   `gorm:"column:MontoExento"`
+	MontoGravado                       *float64   `gorm:"column:MontoGravado"`
+	MontoIva                           *float64   `gorm:"column:MontoIva"`
+	MontoAbonado                       *float64   `gorm:"column:MontoAbonado"`
+	DiaDeAplicacion                    *int       `gorm:"column:DiaDeAplicacion"`
+	MesDeAplicacion                    *int       `gorm:"column:MesDeAplicacion"`
+	AnoDeAplicacion                    *int       `gorm:"column:AnoDeAplicacion"`
+	Observaciones                      *string    `gorm:"column:Observaciones"`
+	CreditoFiscal                      *string    `gorm:"column:CreditoFiscal"`
+	TipoDeCompra                       *string    `gorm:"column:TipoDeCompra"`
+	SeHizoLaRetencion                  string     `gorm:"column:SeHizoLaRetencion"`
+	MontoGravableAlicuotaGeneral       *float64   `gorm:"column:MontoGravableAlicuotaGeneral"`
+	MontoGravableAlicuota2             *float64   `gorm:"column:MontoGravableAlicuota2"`
+	MontoGravableAlicuota3             *float64   `gorm:"column:MontoGravableAlicuota3"`
+	MontoIvaalicuotaGeneral            *float64   `gorm:"column:MontoIvaalicuotaGeneral"`
+	MontoIvaalicuota2                  *float64   `gorm:"column:MontoIvaalicuota2"`
+	MontoIvaalicuota3                  *float64   `gorm:"column:MontoIvaalicuota3"`
+	NumeroPlanillaDeImportacion        *string    `gorm:"column:NumeroPlanillaDeImportacion"`
+	NumeroExpedienteDeImportacion      *string    `gorm:"column:NumeroExpedienteDeImportacion"`
+	TipoDeTransaccion                  *string    `gorm:"column:TipoDeTransaccion"`
+	NumeroDeFacturaAfectada            *string    `gorm:"column:NumeroDeFacturaAfectada"`
+	NumeroControl                      *string    `gorm:"column:NumeroControl"`
+	SeHizoLaRetencionIva               string     `gorm:"column:SeHizoLaRetencionIva"`
+	NumeroComprobanteRetencion         *string    `gorm:"column:NumeroComprobanteRetencion"`
+	FechaAplicacionRetIva              *time.Time `gorm:"column:FechaAplicacionRetIva"`
+	PorcentajeRetencionAplicado        *float64   `gorm:"column:PorcentajeRetencionAplicado"`
+	MontoRetenido                      *float64   `gorm:"column:MontoRetenido"`
+	OrigenDeLaRetencion                *string    `gorm:"column:OrigenDeLaRetencion"`
+	RetencionAplicadaEnPago            string     `gorm:"column:RetencionAplicadaEnPago"`
+	OrigenInformacionRetencion         *string    `gorm:"column:OrigenInformacionRetencion"`
+	CxPgeneradaPor                     *string    `gorm:"column:CxPgeneradaPor"`
+	EsCxPhistorica                     string     `gorm:"column:EsCxPhistorica"`
+	NumDiasDeVencimiento               *int       `gorm:"column:NumDiasDeVencimiento"`
+	NumeroDocOrigen                    *string    `gorm:"column:NumeroDocOrigen"`
+	CodigoLote                         *string    `gorm:"column:CodigoLote"`
+	GenerarAsientoDeRetiroEnCuenta     string     `gorm:"column:GenerarAsientoDeRetiroEnCuenta"`
+	TotalOtrosImpuestos                *float64   `gorm:"column:TotalOtrosImpuestos"`
+	SeContabilRetIva                   string     `gorm:"column:SeContabilRetIva"`
+	DondeContabilRetIva                *string    `gorm:"column:DondeContabilRetIva"`
+	CodigoMoneda                       string     `gorm:"column:CodigoMoneda"`
+	EstaAsociadoARendicion             string     `gorm:"column:EstaAsociadoARendicion"`
+	ConsecutivoRendicion               *int       `gorm:"column:ConsecutivoRendicion"`
+	OrigenDeLaRetencionISLR            *string    `gorm:"column:OrigenDeLaRetencionISLR"`
+	DondeContabilISLR                  *string    `gorm:"column:DondeContabilISLR"`
+	ISLRAplicadaEnPago                 string     `gorm:"column:ISLRAplicadaEnPago"`
+	MontoRetenidoISLR                  *float64   `gorm:"column:MontoRetenidoISLR"`
+	SeContabilISLR                     string     `gorm:"column:SeContabilISLR"`
+	FechaAplicacionImpuestoMunicipal   time.Time  `gorm:"column:FechaAplicacionImpuestoMunicipal"`
+	NumeroComprobanteImpuestoMunicipal *string    `gorm:"column:NumeroComprobanteImpuestoMunicipal"`
+	MontoRetenidoImpuestoMunicipal     *float64   `gorm:"column:MontoRetenidoImpuestoMunicipal"`
+	ImpuestoMunicipalRetenido          string     `gorm:"column:ImpuestoMunicipalRetenido"`
+	NumeroControlDeFacturaAfectada     *string    `gorm:"column:NumeroControlDeFacturaAfectada"`
+	NumeroDeclaracionAduana            *string    `gorm:"column:NumeroDeclaracionAduana"`
+	FechaDeclaracionAduana             *time.Time `gorm:"column:FechaDeclaracionAduana"`
+	UsaPrefijoSerie                    string     `gorm:"column:UsaPrefijoSerie"`
+	EsUnaCuentaATerceros               string     `gorm:"column:EsUnaCuentaATerceros"`
+	CodigoProveedorOriginalServicio    string     `gorm:"column:CodigoProveedorOriginalServicio"`
+	SeHizoLaDetraccion                 string     `gorm:"column:SeHizoLaDetraccion"`
+	AplicaIvaAlicuotaEspecial          string     `gorm:"column:AplicaIvaAlicuotaEspecial"`
+	MontoGravableAlicuotaEspecial1     *float64   `gorm:"column:MontoGravableAlicuotaEspecial1"`
+	MontoIVAAlicuotaEspecial1          *float64   `gorm:"column:MontoIVAAlicuotaEspecial1"`
+	PorcentajeIvaAlicuotaEspecial1     *float64   `gorm:"column:PorcentajeIvaAlicuotaEspecial1"`
+	MontoGravableAlicuotaEspecial2     *float64   `gorm:"column:MontoGravableAlicuotaEspecial2"`
+	MontoIVAAlicuotaEspecial2          *float64   `gorm:"column:MontoIVAAlicuotaEspecial2"`
+	PorcentajeIvaAlicuotaEspecial2     *float64   `gorm:"column:PorcentajeIvaAlicuotaEspecial2"`
+	NumeroSerie                        *string    `gorm:"column:NumeroSerie"`
+	NumeroDeDocumento                  *string    `gorm:"column:NumeroDeDocumento"`
+	NumeroSerieDocAfectado             *string    `gorm:"column:NumeroSerieDocAfectado"`
+	NumeroDeDocumentoAfectado          *string    `gorm:"column:NumeroDeDocumentoAfectado"`
+	CodigoTipoDeComprobante            *string    `gorm:"column:CodigoTipoDeComprobante"`
+	NombreOperador                     *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion            *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                       time.Time  `gorm:"column:fldTimeStamp"`
+	BaseImponibleIGTFML                *float64   `gorm:"column:BaseImponibleIGTFML"`
+	AlicuotaIGTFML                     *float64   `gorm:"column:AlicuotaIGTFML"`
+	MontoIGTFML                        *float64   `gorm:"column:MontoIGTFML"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (cxP) TableName() string {
+	return "cxP"
+}
+
+// DetalleDeConciliacion representa la tabla DetalleDeConciliacion de la base de datos
+type DetalleDeConciliacion struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NroConciliacion     string    `gorm:"column:NroConciliacion;primaryKey"`
+	CodigoCuenta        string    `gorm:"column:CodigoCuenta;primaryKey"`
+	Consecutivo         int       `gorm:"column:Consecutivo;primaryKey"`
+	CodConcepto         string    `gorm:"column:CodConcepto"`
+	TipoConcepto        *string   `gorm:"column:TipoConcepto"`
+	FechaRef            time.Time `gorm:"column:FechaRef"`
+	NumeroDocumento     string    `gorm:"column:NumeroDocumento"`
+	DescripcionDet      string    `gorm:"column:DescripcionDet"`
+	Monto               *float64  `gorm:"column:Monto"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (DetalleDeConciliacion) TableName() string {
+	return "DetalleDeConciliacion"
+}
+
+// DetalleDeControlDespacho representa la tabla DetalleDeControlDespacho de la base de datos
+type DetalleDeControlDespacho struct {
+	ConsecutivoCompania   int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroControlDespacho string     `gorm:"column:NumeroControlDespacho;primaryKey"`
+	ConsecutivoRenglon    int        `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoArticulo        string     `gorm:"column:CodigoArticulo"`
+	DescripcionArticulo   string     `gorm:"column:DescripcionArticulo"`
+	CantidadDespachada    float64    `gorm:"column:CantidadDespachada"`
+	NumeroEmpaque         string     `gorm:"column:NumeroEmpaque"`
+	FechaDeEmpaque        *time.Time `gorm:"column:FechaDeEmpaque"`
+	FldTimeStamp          time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (DetalleDeControlDespacho) TableName() string {
+	return "DetalleDeControlDespacho"
+}
+
+// DireccionDeDespacho representa la tabla DireccionDeDespacho de la base de datos
+type DireccionDeDespacho struct {
+	ConsecutivoCompania  int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoDireccion int       `gorm:"column:ConsecutivoDireccion;primaryKey"`
+	CodigoCliente        string    `gorm:"column:CodigoCliente;primaryKey"`
+	PersonaContacto      *string   `gorm:"column:PersonaContacto"`
+	Direccion            *string   `gorm:"column:Direccion"`
+	Ciudad               *string   `gorm:"column:Ciudad"`
+	ZonaPostal           *string   `gorm:"column:ZonaPostal"`
+	FldTimeStamp         time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (DireccionDeDespacho) TableName() string {
+	return "DireccionDeDespacho"
+}
+
+// DocumentoCobrado representa la tabla DocumentoCobrado de la base de datos
+type DocumentoCobrado struct {
+	ConsecutivoCompania            int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroCobranza                 string     `gorm:"column:NumeroCobranza;primaryKey"`
+	NumeroDelDocumentoCobrado      string     `gorm:"column:NumeroDelDocumentoCobrado;primaryKey"`
+	TipoDeDocumentoCobrado         string     `gorm:"column:TipoDeDocumentoCobrado;primaryKey"`
+	MontoOriginalRestanteAlDiaDelc *float64   `gorm:"column:MontoOriginalRestanteAlDiaDelc"`
+	MontoAbonado                   *float64   `gorm:"column:MontoAbonado"`
+	SimboloMonedaDeCxC             *string    `gorm:"column:SimboloMonedaDeCxC"`
+	MontoTotalDeCxC                *float64   `gorm:"column:MontoTotalDeCxC"`
+	CodigoMonedaDeCxC              *string    `gorm:"column:CodigoMonedaDeCxC"`
+	CambioAMonedaDeCobranza        *float64   `gorm:"column:CambioAMonedaDeCobranza"`
+	MontoEnMonedaOriginalDeCxC     *float64   `gorm:"column:MontoEnMonedaOriginalDeCxC"`
+	MontoIvaDeCxC                  *float64   `gorm:"column:MontoIvaDeCxC"`
+	MontoIvaRetenido               *float64   `gorm:"column:MontoIvaRetenido"`
+	NumeroComprobanteRetIva        *int       `gorm:"column:NumeroComprobanteRetIva"`
+	FechaComprobanteRetIva         *time.Time `gorm:"column:FechaComprobanteRetIva"`
+	SeRetuvoIva                    string     `gorm:"column:SeRetuvoIva"`
+	SeContabilizoIvaDiferido       string     `gorm:"column:SeContabilizoIvaDiferido"`
+	MontoAbonadoEnMonedaOriginal   *float64   `gorm:"column:MontoAbonadoEnMonedaOriginal"`
+	CambioAMonedaLocal             *float64   `gorm:"column:CambioAMonedaLocal"`
+	SimboloMonedaDelAbono          *string    `gorm:"column:SimboloMonedaDelAbono"`
+	FldTimeStamp                   time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (DocumentoCobrado) TableName() string {
+	return "DocumentoCobrado"
+}
+
+// DocumentoPagado representa la tabla DocumentoPagado de la base de datos
+type DocumentoPagado struct {
+	ConsecutivoCompania        int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroComprobante          int       `gorm:"column:NumeroComprobante;primaryKey"`
+	ConsecutivoCxP             int       `gorm:"column:ConsecutivoCxP"`
+	Secuencial                 int       `gorm:"column:Secuencial;primaryKey"`
+	NumeroDelDocumentoPagado   *string   `gorm:"column:NumeroDelDocumentoPagado"`
+	MontoAbonado               *float64  `gorm:"column:MontoAbonado"`
+	RetenerIva                 string    `gorm:"column:RetenerIva"`
+	MontoIvaRetenido           *float64  `gorm:"column:MontoIvaRetenido"`
+	CodigoMonedaDeCxP          *string   `gorm:"column:CodigoMonedaDeCxP"`
+	SimboloMonedaDeCxP         *string   `gorm:"column:SimboloMonedaDeCxP"`
+	CambioAMonedaDelPago       *float64  `gorm:"column:CambioAMonedaDelPago"`
+	MontoEnMonedaOriginalDeCxP *float64  `gorm:"column:MontoEnMonedaOriginalDeCxP"`
+	MontoRestanteAlDiaDelPago  *float64  `gorm:"column:MontoRestanteAlDiaDelPago"`
+	MontoTotalDeCxP            *float64  `gorm:"column:MontoTotalDeCxP"`
+	SeHizoLaRetencionIva       string    `gorm:"column:SeHizoLaRetencionIva"`
+	FldTimeStamp               time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (DocumentoPagado) TableName() string {
+	return "DocumentoPagado"
+}
+
+// EnumBase representa la tabla EnumBase de la base de datos
+type EnumBase struct {
+	IntValue     int       `gorm:"column:IntValue;primaryKey"`
+	IntValue     int       `gorm:"column:IntValue;primaryKey"`
+	DbValue      string    `gorm:"column:DbValue"`
+	DbValue      string    `gorm:"column:DbValue"`
+	FldTimeStamp time.Time `gorm:"column:fldTimeStamp"`
+	FldTimeStamp time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (EnumBase) TableName() string {
+	return "EnumBase"
+}
+
+// Escalada representa la tabla Escalada de la base de datos
+type Escalada struct {
+	Id           interface{} `gorm:"column:Id;primaryKey"`
+	Escalada41   int         `gorm:"column:Escalada41"`
+	Escalada32   *time.Time  `gorm:"column:Escalada32"`
+	Escalada73   *string     `gorm:"column:Escalada73"`
+	Escalada24   *string     `gorm:"column:Escalada24"`
+	Escalada85   *string     `gorm:"column:Escalada85"`
+	Escalada100  []byte      `gorm:"column:Escalada100"`
+	FldTimeStamp time.Time   `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Escalada) TableName() string {
+	return "Escalada"
+}
+
+// EsquemaDeBalance representa la tabla EsquemaDeBalance de la base de datos
+type EsquemaDeBalance struct {
+	ConsecutivoMultiArchivo int        `gorm:"column:ConsecutivoMultiArchivo;primaryKey"`
+	Consecutivo             int        `gorm:"column:Consecutivo;primaryKey"`
+	Descripcion             string     `gorm:"column:Descripcion"`
+	TipoEsquema             string     `gorm:"column:TipoEsquema"`
+	TituloInforme           *string    `gorm:"column:TituloInforme"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (EsquemaDeBalance) TableName() string {
+	return "EsquemaDeBalance"
+}
+
+// EsquemaDeBalanceMov representa la tabla EsquemaDeBalanceMov de la base de datos
+type EsquemaDeBalanceMov struct {
+	ConsecutivoMultiArchivo int        `gorm:"column:ConsecutivoMultiArchivo;primaryKey"`
+	ConsecutivoEsquema      int        `gorm:"column:ConsecutivoEsquema;primaryKey"`
+	Consecutivo             int        `gorm:"column:Consecutivo;primaryKey"`
+	CodigoCuenta            string     `gorm:"column:CodigoCuenta"`
+	CodigoCuentaPadre       string     `gorm:"column:CodigoCuentaPadre"`
+	DescripcionDefCuenta    string     `gorm:"column:DescripcionDefCuenta"`
+	DescripcionCuenta       string     `gorm:"column:DescripcionCuenta"`
+	TipoMovimiento          string     `gorm:"column:TipoMovimiento"`
+	NivelDetalle            string     `gorm:"column:NivelDetalle"`
+	Naturaleza              string     `gorm:"column:Naturaleza"`
+	Orden                   *int       `gorm:"column:Orden"`
+	NivelCuenta             *int       `gorm:"column:NivelCuenta"`
+	Formula                 *string    `gorm:"column:Formula"`
+	TotalUsaDobleRaya       string     `gorm:"column:TotalUsaDobleRaya"`
+	MostrarLineaDeTotal     string     `gorm:"column:MostrarLineaDeTotal"`
+	Visible                 string     `gorm:"column:Visible"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (EsquemaDeBalanceMov) TableName() string {
+	return "EsquemaDeBalanceMov"
+}
+
+// ExistenciaPorAlmacen representa la tabla ExistenciaPorAlmacen de la base de datos
+type ExistenciaPorAlmacen struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoAlmacen       string    `gorm:"column:CodigoAlmacen"`
+	CodigoArticulo      string    `gorm:"column:CodigoArticulo;primaryKey"`
+	Cantidad            *float64  `gorm:"column:Cantidad"`
+	Ubicacion           *string   `gorm:"column:Ubicacion"`
+	ConsecutivoAlmacen  int       `gorm:"column:ConsecutivoAlmacen;primaryKey"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ExistenciaPorAlmacen) TableName() string {
+	return "ExistenciaPorAlmacen"
+}
+
+// ExistenciaPorGrupo representa la tabla ExistenciaPorGrupo de la base de datos
+type ExistenciaPorGrupo struct {
+	ConsecutivoCompania int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoArticulo      string     `gorm:"column:CodigoArticulo;primaryKey"`
+	CodigoGrupo         string     `gorm:"column:CodigoGrupo;primaryKey"`
+	CodigoTalla         string     `gorm:"column:CodigoTalla;primaryKey"`
+	CodigoColor         string     `gorm:"column:CodigoColor;primaryKey"`
+	Existencia          *float64   `gorm:"column:Existencia"`
+	Serial              string     `gorm:"column:Serial;primaryKey"`
+	Rollo               string     `gorm:"column:Rollo;primaryKey"`
+	CantReservada       *float64   `gorm:"column:CantReservada"`
+	Fecha               *time.Time `gorm:"column:Fecha"`
+	Ubicacion           *string    `gorm:"column:Ubicacion"`
+	CodigoLote          *string    `gorm:"column:CodigoLote"`
+	FldTimeStamp        time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ExistenciaPorGrupo) TableName() string {
+	return "ExistenciaPorGrupo"
+}
+
+// factura representa la tabla factura de la base de datos
+type factura struct {
+	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                            string     `gorm:"column:Numero;primaryKey"`
+	Fecha                             time.Time  `gorm:"column:Fecha"`
+	CodigoCliente                     *string    `gorm:"column:CodigoCliente"`
+	CodigoVendedor                    *string    `gorm:"column:CodigoVendedor"`
+	Observaciones                     *string    `gorm:"column:Observaciones"`
+	TotalMontoExento                  *float64   `gorm:"column:TotalMontoExento"`
+	TotalBaseImponible                *float64   `gorm:"column:TotalBaseImponible"`
+	TotalRenglones                    *float64   `gorm:"column:TotalRenglones"`
+	TotalIVA                          *float64   `gorm:"column:TotalIVA"`
+	TotalFactura                      *float64   `gorm:"column:TotalFactura"`
+	PorcentajeDescuento               *float64   `gorm:"column:PorcentajeDescuento"`
+	CodigoNota1                       *string    `gorm:"column:CodigoNota1"`
+	CodigoNota2                       *string    `gorm:"column:CodigoNota2"`
+	Moneda                            *string    `gorm:"column:Moneda"`
+	NivelDePrecio                     *string    `gorm:"column:NivelDePrecio"`
+	ReservarMercancia                 string     `gorm:"column:ReservarMercancia"`
+	FechaDeRetiro                     *time.Time `gorm:"column:FechaDeRetiro"`
+	CodigoAlmacen                     *string    `gorm:"column:CodigoAlmacen"`
+	StatusFactura                     *string    `gorm:"column:StatusFactura"`
+	TipoDeDocumento                   string     `gorm:"column:TipoDeDocumento;primaryKey"`
+	InsertadaManualmente              string     `gorm:"column:InsertadaManualmente"`
+	FacturaHistorica                  string     `gorm:"column:FacturaHistorica"`
+	Cancelada                         string     `gorm:"column:Cancelada"`
+	UsarDireccionFiscal               string     `gorm:"column:UsarDireccionFiscal"`
+	NoDirDespachoAimprimir            *int       `gorm:"column:NoDirDespachoAimprimir"`
+	CambioABolivares                  *float64   `gorm:"column:CambioABolivares"`
+	MontoDelAbono                     *float64   `gorm:"column:MontoDelAbono"`
+	FechaDeVencimiento                *time.Time `gorm:"column:FechaDeVencimiento"`
+	CondicionesDePago                 *string    `gorm:"column:CondicionesDePago"`
+	FormaDeLaInicial                  *string    `gorm:"column:FormaDeLaInicial"`
+	PorcentajeDeLaInicial             *float64   `gorm:"column:PorcentajeDeLaInicial"`
+	NumeroDeCuotas                    *int       `gorm:"column:NumeroDeCuotas"`
+	MontoDeLasCuotas                  *float64   `gorm:"column:MontoDeLasCuotas"`
+	MontoUltimaCuota                  *float64   `gorm:"column:MontoUltimaCuota"`
+	Talonario                         *string    `gorm:"column:Talonario"`
+	FormaDePago                       *string    `gorm:"column:FormaDePago"`
+	NumDiasDeVencimiento1aCuota       *int       `gorm:"column:NumDiasDeVencimiento1aCuota"`
+	EditarMontoCuota                  *string    `gorm:"column:EditarMontoCuota"`
+	NumeroControl                     *string    `gorm:"column:NumeroControl"`
+	TipoDeTransaccion                 *string    `gorm:"column:TipoDeTransaccion"`
+	NumeroFacturaAfectada             *string    `gorm:"column:NumeroFacturaAfectada"`
+	NumeroPlanillaExportacion         *string    `gorm:"column:NumeroPlanillaExportacion"`
+	TipoDeVenta                       *string    `gorm:"column:TipoDeVenta"`
+	UsaMaquinaFiscal                  *string    `gorm:"column:UsaMaquinaFiscal"`
+	CodigoMaquinaRegistradora         *string    `gorm:"column:CodigoMaquinaRegistradora"`
+	NumeroDesde                       *string    `gorm:"column:NumeroDesde"`
+	NumeroHasta                       *string    `gorm:"column:NumeroHasta"`
+	NumeroControlHasta                *string    `gorm:"column:NumeroControlHasta"`
+	MontoIvaRetenido                  *float64   `gorm:"column:MontoIvaRetenido"`
+	FechaAplicacionRetIVA             *time.Time `gorm:"column:FechaAplicacionRetIVA"`
+	NumeroComprobanteRetIVA           *int       `gorm:"column:NumeroComprobanteRetIVA"`
+	FechaComprobanteRetIVA            *time.Time `gorm:"column:FechaComprobanteRetIVA"`
+	SeRetuvoIVA                       *string    `gorm:"column:SeRetuvoIVA"`
+	FacturaConPreciosSinIva           string     `gorm:"column:FacturaConPreciosSinIva"`
+	VueltoDelCobroDirecto             *float64   `gorm:"column:VueltoDelCobroDirecto"`
+	ConsecutivoCaja                   *int       `gorm:"column:ConsecutivoCaja"`
+	GeneraCobroDirecto                string     `gorm:"column:GeneraCobroDirecto"`
+	FechaDeFacturaAfectada            time.Time  `gorm:"column:FechaDeFacturaAfectada"`
+	FechaDeEntrega                    *time.Time `gorm:"column:FechaDeEntrega"`
+	PorcentajeDescuento1              *float64   `gorm:"column:PorcentajeDescuento1"`
+	PorcentajeDescuento2              *float64   `gorm:"column:PorcentajeDescuento2"`
+	MontoDescuento1                   *float64   `gorm:"column:MontoDescuento1"`
+	MontoDescuento2                   *float64   `gorm:"column:MontoDescuento2"`
+	CodigoLote                        *string    `gorm:"column:CodigoLote"`
+	Devolucion                        string     `gorm:"column:Devolucion"`
+	PorcentajeAlicuota1               *float64   `gorm:"column:PorcentajeAlicuota1"`
+	PorcentajeAlicuota2               *float64   `gorm:"column:PorcentajeAlicuota2"`
+	PorcentajeAlicuota3               *float64   `gorm:"column:PorcentajeAlicuota3"`
+	MontoIVAAlicuota1                 *float64   `gorm:"column:MontoIVAAlicuota1"`
+	MontoIVAAlicuota2                 *float64   `gorm:"column:MontoIVAAlicuota2"`
+	MontoIVAAlicuota3                 *float64   `gorm:"column:MontoIVAAlicuota3"`
+	MontoGravableAlicuota1            *float64   `gorm:"column:MontoGravableAlicuota1"`
+	MontoGravableAlicuota2            *float64   `gorm:"column:MontoGravableAlicuota2"`
+	MontoGravableAlicuota3            *float64   `gorm:"column:MontoGravableAlicuota3"`
+	RealizoCierreZ                    string     `gorm:"column:RealizoCierreZ"`
+	NumeroComprobanteFiscal           *string    `gorm:"column:NumeroComprobanteFiscal"`
+	SerialMaquinaFiscal               *string    `gorm:"column:SerialMaquinaFiscal"`
+	AplicarPromocion                  string     `gorm:"column:AplicarPromocion"`
+	RealizoCierreX                    string     `gorm:"column:RealizoCierreX"`
+	HoraModificacion                  *string    `gorm:"column:HoraModificacion"`
+	FormaDeCobro                      string     `gorm:"column:FormaDeCobro"`
+	OtraFormaDeCobro                  *string    `gorm:"column:OtraFormaDeCobro"`
+	NoCotizacionDeOrigen              *string    `gorm:"column:NoCotizacionDeOrigen"`
+	NoContrato                        *string    `gorm:"column:NoContrato"`
+	ConsecutivoVehiculo               *int       `gorm:"column:ConsecutivoVehiculo"`
+	ConsecutivoAlmacen                int        `gorm:"column:ConsecutivoAlmacen"`
+	NumeroResumenDiario               *string    `gorm:"column:NumeroResumenDiario"`
+	NoControlDespachoDeOrigen         *string    `gorm:"column:NoControlDespachoDeOrigen"`
+	ImprimeFiscal                     string     `gorm:"column:ImprimeFiscal"`
+	EsDiferida                        string     `gorm:"column:EsDiferida"`
+	EsOriginalmenteDiferida           string     `gorm:"column:EsOriginalmenteDiferida"`
+	SeContabilizoIvaDiferido          string     `gorm:"column:SeContabilizoIvaDiferido"`
+	AplicaDecretoIvaEspecial          string     `gorm:"column:AplicaDecretoIvaEspecial"`
+	EsGeneradaPorPuntoDeVenta         string     `gorm:"column:EsGeneradaPorPuntoDeVenta"`
+	CambioMonedaCXC                   float64    `gorm:"column:CambioMonedaCXC"`
+	CambioMostrarTotalEnDivisas       float64    `gorm:"column:CambioMostrarTotalEnDivisas"`
+	CodigoMonedaDeCobro               *string    `gorm:"column:CodigoMonedaDeCobro"`
+	GeneradaPorNotaEntrega            *string    `gorm:"column:GeneradaPorNotaEntrega"`
+	EmitidaEnFacturaNumero            *string    `gorm:"column:EmitidaEnFacturaNumero"`
+	CodigoMoneda                      string     `gorm:"column:CodigoMoneda"`
+	NombreOperador                    *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion           *time.Time `gorm:"column:FechaUltimaModificacion"`
+	NumeroParaResumen                 *int       `gorm:"column:NumeroParaResumen"`
+	NroDiasMantenerCambioAMonedaLocal *int       `gorm:"column:NroDiasMantenerCambioAMonedaLocal"`
+	FechaLimiteCambioAMonedaLocal     *time.Time `gorm:"column:FechaLimiteCambioAMonedaLocal"`
+	FldTimeStamp                      time.Time  `gorm:"column:fldTimeStamp"`
+	GeneradoPor                       *string    `gorm:"column:GeneradoPor"`
+	BaseImponibleIGTF                 *float64   `gorm:"column:BaseImponibleIGTF"`
+	IGTFML                            *float64   `gorm:"column:IGTFML"`
+	IGTFME                            *float64   `gorm:"column:IGTFME"`
+	AlicuotaIGTF                      *float64   `gorm:"column:AlicuotaIGTF"`
+	MotivoDeAnulacion                 *string    `gorm:"column:MotivoDeAnulacion"`
+	ProveedorImprentaDigital          string     `gorm:"column:ProveedorImprentaDigital"`
+	ConsecutivoVendedor               int        `gorm:"column:ConsecutivoVendedor"`
+	ImprentaDigitalGUID               *string    `gorm:"column:ImprentaDigitalGUID"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (factura) TableName() string {
+	return "factura"
+}
+
+// fechasDeLosInformes representa la tabla fechasDeLosInformes de la base de datos
+type fechasDeLosInformes struct {
+	NombreOperador string     `gorm:"column:NombreOperador;primaryKey"`
+	FechaInicial   *time.Time `gorm:"column:FechaInicial"`
+	FechaFinal     *time.Time `gorm:"column:FechaFinal"`
+	FldTimeStamp   time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (fechasDeLosInformes) TableName() string {
+	return "fechasDeLosInformes"
+}
+
+// GrupoDeActivos representa la tabla GrupoDeActivos de la base de datos
+type GrupoDeActivos struct {
+	ConsecutivoPeriodo              int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	Codigo                          int        `gorm:"column:Codigo;primaryKey"`
+	Nombre                          string     `gorm:"column:Nombre"`
+	EsActivoFijo                    string     `gorm:"column:EsActivoFijo"`
+	CasillaIae                      *string    `gorm:"column:CasillaIae"`
+	Depreciable                     string     `gorm:"column:Depreciable"`
+	CuentaDepreciacionAcumulada     *string    `gorm:"column:CuentaDepreciacionAcumulada"`
+	CuentaGastosDepreciacion        *string    `gorm:"column:CuentaGastosDepreciacion"`
+	CuentaDepreciacionAcumuladaNIIF *string    `gorm:"column:CuentaDepreciacionAcumuladaNIIF"`
+	CuentaGastosDepreciacionNIIF    *string    `gorm:"column:CuentaGastosDepreciacionNIIF"`
+	NombreOperador                  *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion         *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                    time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (GrupoDeActivos) TableName() string {
+	return "GrupoDeActivos"
+}
+
+// GrupoDeInventario representa la tabla GrupoDeInventario de la base de datos
+type GrupoDeInventario struct {
+	ConsecutivoPeriodo       int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	NombreDelGrupo1          *string    `gorm:"column:NombreDelGrupo1"`
+	NombreDelGrupo2          *string    `gorm:"column:NombreDelGrupo2"`
+	NombreDelGrupo3          *string    `gorm:"column:NombreDelGrupo3"`
+	NombreDelGrupo4          *string    `gorm:"column:NombreDelGrupo4"`
+	NombreDelGrupo5          *string    `gorm:"column:NombreDelGrupo5"`
+	NombreDelGrupo6          *string    `gorm:"column:NombreDelGrupo6"`
+	NombreDelGrupo7          *string    `gorm:"column:NombreDelGrupo7"`
+	NombreDelGrupo8          *string    `gorm:"column:NombreDelGrupo8"`
+	NombreDelGrupo9          *string    `gorm:"column:NombreDelGrupo9"`
+	NombreDelGrupo10         *string    `gorm:"column:NombreDelGrupo10"`
+	InventarioDeMercancias1  *string    `gorm:"column:InventarioDeMercancias1"`
+	InventarioDeMercancias2  *string    `gorm:"column:InventarioDeMercancias2"`
+	InventarioDeMercancias3  *string    `gorm:"column:InventarioDeMercancias3"`
+	InventarioDeMercancias4  *string    `gorm:"column:InventarioDeMercancias4"`
+	InventarioDeMercancias5  *string    `gorm:"column:InventarioDeMercancias5"`
+	InventarioDeMercancias6  *string    `gorm:"column:InventarioDeMercancias6"`
+	InventarioDeMercancias7  *string    `gorm:"column:InventarioDeMercancias7"`
+	InventarioDeMercancias8  *string    `gorm:"column:InventarioDeMercancias8"`
+	InventarioDeMercancias9  *string    `gorm:"column:InventarioDeMercancias9"`
+	InventarioDeMercancias10 *string    `gorm:"column:InventarioDeMercancias10"`
+	InventarioInicial1       *string    `gorm:"column:InventarioInicial1"`
+	InventarioInicial2       *string    `gorm:"column:InventarioInicial2"`
+	InventarioInicial3       *string    `gorm:"column:InventarioInicial3"`
+	InventarioInicial4       *string    `gorm:"column:InventarioInicial4"`
+	InventarioInicial5       *string    `gorm:"column:InventarioInicial5"`
+	InventarioInicial6       *string    `gorm:"column:InventarioInicial6"`
+	InventarioInicial7       *string    `gorm:"column:InventarioInicial7"`
+	InventarioInicial8       *string    `gorm:"column:InventarioInicial8"`
+	InventarioInicial9       *string    `gorm:"column:InventarioInicial9"`
+	InventarioInicial10      *string    `gorm:"column:InventarioInicial10"`
+	InventarioFinal1         *string    `gorm:"column:InventarioFinal1"`
+	InventarioFinal2         *string    `gorm:"column:InventarioFinal2"`
+	InventarioFinal3         *string    `gorm:"column:InventarioFinal3"`
+	InventarioFinal4         *string    `gorm:"column:InventarioFinal4"`
+	InventarioFinal5         *string    `gorm:"column:InventarioFinal5"`
+	InventarioFinal6         *string    `gorm:"column:InventarioFinal6"`
+	InventarioFinal7         *string    `gorm:"column:InventarioFinal7"`
+	InventarioFinal8         *string    `gorm:"column:InventarioFinal8"`
+	InventarioFinal9         *string    `gorm:"column:InventarioFinal9"`
+	InventarioFinal10        *string    `gorm:"column:InventarioFinal10"`
+	NombreOperador           *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion  *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp             time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (GrupoDeInventario) TableName() string {
+	return "GrupoDeInventario"
+}
+
+// GrupoTallaColor representa la tabla GrupoTallaColor de la base de datos
+type GrupoTallaColor struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoGrupo             string     `gorm:"column:CodigoGrupo;primaryKey"`
+	Descripcion             *string    `gorm:"column:Descripcion"`
+	UsaTalla                *string    `gorm:"column:UsaTalla"`
+	UsaColor                *string    `gorm:"column:UsaColor"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	CodigoLote              *string    `gorm:"column:CodigoLote"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (GrupoTallaColor) TableName() string {
+	return "GrupoTallaColor"
+}
+
+// GVentasDefiniciones representa la tabla GVentasDefiniciones de la base de datos
+type GVentasDefiniciones struct {
+	Id                  interface{} `gorm:"column:Id;primaryKey"`
+	ConsecutivoCompania *int        `gorm:"column:ConsecutivoCompania"`
+	ModuleName          *string     `gorm:"column:ModuleName"`
+	Value               *string     `gorm:"column:Value"`
+	Eliminada           bool        `gorm:"column:Eliminada"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (GVentasDefiniciones) TableName() string {
+	return "GVentasDefiniciones"
+}
+
+// lote representa la tabla lote de la base de datos
+type lote struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Numero                  int        `gorm:"column:Numero;primaryKey"`
+	Motivo                  *string    `gorm:"column:Motivo"`
+	Fecha                   *time.Time `gorm:"column:Fecha"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (lote) TableName() string {
+	return "lote"
+}
+
+// loteAdm representa la tabla loteAdm de la base de datos
+type loteAdm struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoLote              string     `gorm:"column:CodigoLote;primaryKey"`
+	FechaLote               *time.Time `gorm:"column:FechaLote"`
+	Modulo                  *string    `gorm:"column:Modulo"`
+	Descripcion             *string    `gorm:"column:Descripcion"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (loteAdm) TableName() string {
+	return "loteAdm"
+}
+
+// mesGenerado representa la tabla mesGenerado de la base de datos
+type mesGenerado struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroContrato      string    `gorm:"column:NumeroContrato;primaryKey"`
+	FechaDeGeneracion   time.Time `gorm:"column:FechaDeGeneracion;primaryKey"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (mesGenerado) TableName() string {
+	return "mesGenerado"
+}
+
+// Moneda representa la tabla Moneda de la base de datos
+type Moneda struct {
+	Codigo       string    `gorm:"column:Codigo;primaryKey"`
+	Nombre       string    `gorm:"column:Nombre"`
+	Simbolo      *string   `gorm:"column:Simbolo"`
+	Activa       string    `gorm:"column:Activa"`
+	TipoDeMoneda string    `gorm:"column:TipoDeMoneda"`
+	FldTimeStamp time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Moneda) TableName() string {
+	return "Moneda"
+}
+
+// MovimientoBancario representa la tabla MovimientoBancario de la base de datos
+type MovimientoBancario struct {
+	ConsecutivoCompania            int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoMovimiento          int        `gorm:"column:ConsecutivoMovimiento;primaryKey"`
+	CodigoCtaBancaria              string     `gorm:"column:CodigoCtaBancaria;primaryKey"`
+	CodigoConcepto                 string     `gorm:"column:CodigoConcepto;primaryKey"`
+	Fecha                          time.Time  `gorm:"column:Fecha;primaryKey"`
+	TipoConcepto                   *string    `gorm:"column:TipoConcepto"`
+	Monto                          *float64   `gorm:"column:Monto"`
+	NumeroDocumento                *string    `gorm:"column:NumeroDocumento"`
+	Descripcion                    *string    `gorm:"column:Descripcion"`
+	GeneraImpuestoBancario         string     `gorm:"column:GeneraImpuestoBancario"`
+	NroMovimientoRelacionado       *string    `gorm:"column:NroMovimientoRelacionado"`
+	GeneradoPor                    *string    `gorm:"column:GeneradoPor"`
+	CambioAbolivares               *float64   `gorm:"column:CambioAbolivares"`
+	ImprimirCheque                 string     `gorm:"column:ImprimirCheque"`
+	ConciliadoSn                   string     `gorm:"column:ConciliadoSn"`
+	NroConciliacion                string     `gorm:"column:NroConciliacion"`
+	GenerarAsientoDeRetiroEnCuenta string     `gorm:"column:GenerarAsientoDeRetiroEnCuenta"`
+	NombreOperador                 *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion        *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                   time.Time  `gorm:"column:fldTimeStamp"`
+	AlicuotaImpBancario            *float64   `gorm:"column:AlicuotaImpBancario"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (MovimientoBancario) TableName() string {
+	return "MovimientoBancario"
+}
+
+// NotaDeEntradaSalida representa la tabla NotaDeEntradaSalida de la base de datos
+type NotaDeEntradaSalida struct {
+	ConsecutivoCompania        int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroDocumento            string     `gorm:"column:NumeroDocumento;primaryKey"`
+	TipodeOperacion            *string    `gorm:"column:TipodeOperacion"`
+	CodigoCliente              *string    `gorm:"column:CodigoCliente"`
+	CodigoAlmacen              *string    `gorm:"column:CodigoAlmacen"`
+	Fecha                      time.Time  `gorm:"column:Fecha"`
+	Comentarios                *string    `gorm:"column:Comentarios"`
+	CodigoLote                 *string    `gorm:"column:CodigoLote"`
+	StatusNotaEntradaSalida    *string    `gorm:"column:StatusNotaEntradaSalida"`
+	ConsecutivoAlmacen         int        `gorm:"column:ConsecutivoAlmacen"`
+	GeneradoPor                *string    `gorm:"column:GeneradoPor"`
+	ConsecutivoDocumentoOrigen *int       `gorm:"column:ConsecutivoDocumentoOrigen"`
+	TipoNotaProduccion         *string    `gorm:"column:TipoNotaProduccion"`
+	NombreOperador             *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion    *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp               time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (NotaDeEntradaSalida) TableName() string {
+	return "NotaDeEntradaSalida"
+}
+
+// OPFalsoRetencion representa la tabla OPFalsoRetencion de la base de datos
+type OPFalsoRetencion struct {
+	ConsecutivoCompania             int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoCxP                  int       `gorm:"column:ConsecutivoCxP"`
+	NumeroPago                      string    `gorm:"column:NumeroPago;primaryKey"`
+	NumeroControl                   *string   `gorm:"column:NumeroControl"`
+	MontoRestanteAlDiaDelPago       *float64  `gorm:"column:MontoRestanteAlDiaDelPago"`
+	MontoAbonado                    *float64  `gorm:"column:MontoAbonado"`
+	CodigoRetencion                 string    `gorm:"column:CodigoRetencion;primaryKey"`
+	MontoOriginalCxp                *float64  `gorm:"column:MontoOriginalCxp"`
+	NumeroDelDocumentoPagado        *string   `gorm:"column:NumeroDelDocumentoPagado"`
+	PorcentajeRetencion             *float64  `gorm:"column:PorcentajeRetencion"`
+	Sustraendo                      *float64  `gorm:"column:Sustraendo"`
+	PorcentajeBaseImponible         *float64  `gorm:"column:PorcentajeBaseImponible"`
+	MontoBaseImponible              *float64  `gorm:"column:MontoBaseImponible"`
+	MontoRetencion                  *float64  `gorm:"column:MontoRetencion"`
+	ParaPagosMayoresDe              *float64  `gorm:"column:ParaPagosMayoresDe"`
+	SeHizoLaRetencion               string    `gorm:"column:SeHizoLaRetencion"`
+	LeyendaSeAplicoRetencion        *string   `gorm:"column:LeyendaSeAplicoRetencion"`
+	Secuencial                      *float64  `gorm:"column:Secuencial"`
+	MontoIva                        *float64  `gorm:"column:MontoIva"`
+	MontoCambio                     *float64  `gorm:"column:MontoCambio"`
+	CodigoMonedaDeCxP               *string   `gorm:"column:CodigoMonedaDeCxP"`
+	SimboloMonedaDeCxP              *string   `gorm:"column:SimboloMonedaDeCxP"`
+	CambioAMonedaDelPago            *float64  `gorm:"column:CambioAMonedaDelPago"`
+	MontoEnMonedaOriginalDeCxP      *float64  `gorm:"column:MontoEnMonedaOriginalDeCxP"`
+	MontoTotalDeCxP                 *float64  `gorm:"column:MontoTotalDeCxP"`
+	RetenerIva                      string    `gorm:"column:RetenerIva"`
+	MontoIvaRetenido                *float64  `gorm:"column:MontoIvaRetenido"`
+	SeHizoLaRetencionIva            string    `gorm:"column:SeHizoLaRetencionIva"`
+	EsUnaCuentaATerceros            string    `gorm:"column:EsUnaCuentaATerceros"`
+	CodigoProveedorOriginalServicio string    `gorm:"column:CodigoProveedorOriginalServicio"`
+	FldTimeStamp                    time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (OPFalsoRetencion) TableName() string {
+	return "OPFalsoRetencion"
+}
+
+// otrosCargosDeFactura representa la tabla otrosCargosDeFactura de la base de datos
+type otrosCargosDeFactura struct {
+	ConsecutivoCompania       int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Codigo                    string     `gorm:"column:Codigo;primaryKey"`
+	Descripcion               string     `gorm:"column:Descripcion"`
+	Status                    *string    `gorm:"column:Status"`
+	SeCalculaEnBasea          *string    `gorm:"column:SeCalculaEnBasea"`
+	Monto                     *float64   `gorm:"column:Monto"`
+	BaseFormula               *string    `gorm:"column:BaseFormula"`
+	PorcentajeSobreBase       *float64   `gorm:"column:PorcentajeSobreBase"`
+	Sustraendo                *float64   `gorm:"column:Sustraendo"`
+	ComoAplicaAlTotalFactura  *string    `gorm:"column:ComoAplicaAlTotalFactura"`
+	CuentaContableOtrosCargos *string    `gorm:"column:CuentaContableOtrosCargos"`
+	PorcentajeComision        *float64   `gorm:"column:PorcentajeComision"`
+	ExcluirDeComision         string     `gorm:"column:ExcluirDeComision"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (otrosCargosDeFactura) TableName() string {
+	return "otrosCargosDeFactura"
+}
+
+// OtrosImpuestos representa la tabla OtrosImpuestos de la base de datos
+type OtrosImpuestos struct {
+	ConsecutivoOI int       `gorm:"column:ConsecutivoOI;primaryKey"`
+	Siglas        string    `gorm:"column:Siglas"`
+	FldTimeStamp  time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (OtrosImpuestos) TableName() string {
+	return "OtrosImpuestos"
+}
+
+// OtrosImpuestosCxP representa la tabla OtrosImpuestosCxP de la base de datos
+type OtrosImpuestosCxP struct {
+	ConsecutivoCompania  int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoCxP       int       `gorm:"column:ConsecutivoCxP;primaryKey"`
+	Descripcion          *string   `gorm:"column:Descripcion"`
+	ConsecutivoRenglonOI int       `gorm:"column:ConsecutivoRenglonOI;primaryKey"`
+	CodigoOI             string    `gorm:"column:CodigoOI"`
+	Siglas               string    `gorm:"column:Siglas"`
+	AlicuotaOI           *float64  `gorm:"column:AlicuotaOI"`
+	MontoBaseImponible   float64   `gorm:"column:MontoBaseImponible"`
+	Monto                float64   `gorm:"column:Monto"`
+	FldTimeStamp         time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (OtrosImpuestosCxP) TableName() string {
+	return "OtrosImpuestosCxP"
+}
+
+// Pago representa la tabla Pago de la base de datos
+type Pago struct {
+	ConsecutivoCompania            int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroComprobante              int        `gorm:"column:NumeroComprobante;primaryKey"`
+	NumeroCheque                   string     `gorm:"column:NumeroCheque"`
+	StatusOrdenDePago              string     `gorm:"column:StatusOrdenDePago"`
+	Fecha                          time.Time  `gorm:"column:Fecha"`
+	FechaAnulacion                 *time.Time `gorm:"column:FechaAnulacion"`
+	CodigoProveedor                *string    `gorm:"column:CodigoProveedor"`
+	TotalDocumentos                *float64   `gorm:"column:TotalDocumentos"`
+	TotalRetenido                  *float64   `gorm:"column:TotalRetenido"`
+	TotalOtros                     *float64   `gorm:"column:TotalOtros"`
+	MontoCheque                    *float64   `gorm:"column:MontoCheque"`
+	FormaDePago                    *string    `gorm:"column:FormaDePago"`
+	CodigoCuentaBancaria           string     `gorm:"column:CodigoCuentaBancaria"`
+	CodigoConcepto                 *string    `gorm:"column:CodigoConcepto"`
+	AplicaDebitoBancario           string     `gorm:"column:AplicaDebitoBancario"`
+	DescripcionPago                *string    `gorm:"column:DescripcionPago"`
+	Moneda                         *string    `gorm:"column:Moneda"`
+	CambioaBolivares               *float64   `gorm:"column:CambioaBolivares"`
+	TotalRetenidoIva               *float64   `gorm:"column:TotalRetenidoIva"`
+	EsPagoHistorico                string     `gorm:"column:EsPagoHistorico"`
+	PagadoAnticipo                 *float64   `gorm:"column:PagadoAnticipo"`
+	TotalAnticiposSinUsar          *float64   `gorm:"column:TotalAnticiposSinUsar"`
+	Beneficiario                   *string    `gorm:"column:Beneficiario"`
+	CodigoMoneda                   string     `gorm:"column:CodigoMoneda"`
+	Origen                         string     `gorm:"column:Origen"`
+	NumeroLote                     int        `gorm:"column:NumeroLote"`
+	TotalRetenidoImpuestoMunicipal *float64   `gorm:"column:TotalRetenidoImpuestoMunicipal"`
+	NombreOperador                 *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion        *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                   time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Pago) TableName() string {
+	return "Pago"
+}
+
+// ParametrosActivo representa la tabla ParametrosActivo de la base de datos
+type ParametrosActivo struct {
+	ConsecutivoCompania           int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	UsaFechaIniciodeUso           string     `gorm:"column:UsaFechaIniciodeUso"`
+	VidaUtilExpresadaEn           *string    `gorm:"column:VidaUtilExpresadaEn"`
+	UsaValordeRescate             string     `gorm:"column:UsaValordeRescate"`
+	DepreciarCompradosElUltimoDia string     `gorm:"column:DepreciarCompradosElUltimoDia"`
+	DepreciarDesde                *string    `gorm:"column:DepreciarDesde"`
+	UsaDepreciacionMensual        string     `gorm:"column:UsaDepreciacionMensual"`
+	LongitudAuxiliar              *int       `gorm:"column:LongitudAuxiliar"`
+	NombreOperador                *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion       *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                  time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ParametrosActivo) TableName() string {
+	return "ParametrosActivo"
+}
+
+// ParametrosMsdeManager representa la tabla ParametrosMsdeManager de la base de datos
+type ParametrosMsdeManager struct {
+	SecuencialInterno          int       `gorm:"column:SecuencialInterno;primaryKey"`
+	ReestructuracionAutomatica string    `gorm:"column:ReestructuracionAutomatica"`
+	TablasCreadas              string    `gorm:"column:TablasCreadas"`
+	FldTimeStamp               time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ParametrosMsdeManager) TableName() string {
+	return "ParametrosMsdeManager"
+}
+
+// PERIODO representa la tabla PERIODO de la base de datos
+type PERIODO struct {
+	ConsecutivoCompania                     int        `gorm:"column:ConsecutivoCompania"`
+	ConsecutivoPeriodo                      int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	FechaAperturaDelPeriodo                 time.Time  `gorm:"column:FechaAperturaDelPeriodo"`
+	FechaCierreDelPeriodo                   time.Time  `gorm:"column:FechaCierreDelPeriodo"`
+	PeriodoCerrado                          string     `gorm:"column:PeriodoCerrado"`
+	TipoDeNumeracion                        *string    `gorm:"column:TipoDeNumeracion"`
+	CuentaConCerosAderecha                  string     `gorm:"column:CuentaConCerosAderecha"`
+	UsaCierreDeMes                          string     `gorm:"column:UsaCierreDeMes"`
+	FechaDeCierre1                          *time.Time `gorm:"column:FechaDeCierre1"`
+	FechaDeCierre2                          *time.Time `gorm:"column:FechaDeCierre2"`
+	FechaDeCierre3                          *time.Time `gorm:"column:FechaDeCierre3"`
+	FechaDeCierre4                          *time.Time `gorm:"column:FechaDeCierre4"`
+	FechaDeCierre5                          *time.Time `gorm:"column:FechaDeCierre5"`
+	FechaDeCierre6                          *time.Time `gorm:"column:FechaDeCierre6"`
+	FechaDeCierre7                          *time.Time `gorm:"column:FechaDeCierre7"`
+	FechaDeCierre8                          *time.Time `gorm:"column:FechaDeCierre8"`
+	FechaDeCierre9                          *time.Time `gorm:"column:FechaDeCierre9"`
+	FechaDeCierre10                         *time.Time `gorm:"column:FechaDeCierre10"`
+	FechaDeCierre11                         *time.Time `gorm:"column:FechaDeCierre11"`
+	Mes1Cerrado                             string     `gorm:"column:Mes1Cerrado"`
+	Mes2Cerrado                             string     `gorm:"column:Mes2Cerrado"`
+	Mes3Cerrado                             string     `gorm:"column:Mes3Cerrado"`
+	Mes4Cerrado                             string     `gorm:"column:Mes4Cerrado"`
+	Mes5Cerrado                             string     `gorm:"column:Mes5Cerrado"`
+	Mes6Cerrado                             string     `gorm:"column:Mes6Cerrado"`
+	Mes7Cerrado                             string     `gorm:"column:Mes7Cerrado"`
+	Mes8Cerrado                             string     `gorm:"column:Mes8Cerrado"`
+	Mes9Cerrado                             string     `gorm:"column:Mes9Cerrado"`
+	Mes10Cerrado                            string     `gorm:"column:Mes10Cerrado"`
+	Mes11Cerrado                            string     `gorm:"column:Mes11Cerrado"`
+	Mes12Cerrado                            string     `gorm:"column:Mes12Cerrado"`
+	Nivel1                                  *int       `gorm:"column:Nivel1"`
+	Nivel2                                  *int       `gorm:"column:Nivel2"`
+	Nivel3                                  *int       `gorm:"column:Nivel3"`
+	Nivel4                                  *int       `gorm:"column:Nivel4"`
+	Nivel5                                  *int       `gorm:"column:Nivel5"`
+	Nivel6                                  *int       `gorm:"column:Nivel6"`
+	Nivel7                                  *int       `gorm:"column:Nivel7"`
+	Nivel8                                  *int       `gorm:"column:Nivel8"`
+	Nivel9                                  *int       `gorm:"column:Nivel9"`
+	Nivel10                                 *int       `gorm:"column:Nivel10"`
+	NombreNivel1                            *string    `gorm:"column:NombreNivel1"`
+	NombreNivel2                            *string    `gorm:"column:NombreNivel2"`
+	NombreNivel3                            *string    `gorm:"column:NombreNivel3"`
+	NombreNivel4                            *string    `gorm:"column:NombreNivel4"`
+	NombreNivel5                            *string    `gorm:"column:NombreNivel5"`
+	NombreNivel6                            *string    `gorm:"column:NombreNivel6"`
+	NombreNivel7                            *string    `gorm:"column:NombreNivel7"`
+	NombreNivel8                            *string    `gorm:"column:NombreNivel8"`
+	NombreNivel9                            *string    `gorm:"column:NombreNivel9"`
+	NombreNivel10                           *string    `gorm:"column:NombreNivel10"`
+	FechaCierreEjercicioAnterior            *time.Time `gorm:"column:FechaCierreEjercicioAnterior"`
+	NivelParaImpresion                      *string    `gorm:"column:NivelParaImpresion"`
+	NumeroNivelParaImpresion                *int       `gorm:"column:NumeroNivelParaImpresion"`
+	NivelParaAsientos                       *string    `gorm:"column:NivelParaAsientos"`
+	NumeroNivelParaAsientos                 *int       `gorm:"column:NumeroNivelParaAsientos"`
+	CierreDelEjercicio                      *string    `gorm:"column:CierreDelEjercicio"`
+	CierreEjerciciosAnteriores              *string    `gorm:"column:CierreEjerciciosAnteriores"`
+	CapitalSocial                           *string    `gorm:"column:CapitalSocial"`
+	ReconversionMonetaria                   *string    `gorm:"column:ReconversionMonetaria"`
+	Periodo13Meses                          string     `gorm:"column:Periodo13Meses"`
+	SuperavitDeRevaluaciones                *string    `gorm:"column:SuperavitDeRevaluaciones"`
+	NombreOperador                          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion                 *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp                            time.Time  `gorm:"column:fldTimeStamp"`
+	GananciaPerdidaCambiaria                *string    `gorm:"column:GananciaPerdidaCambiaria"`
+	GenerarComprobanteDeDiferenciaCambiaria string     `gorm:"column:GenerarComprobanteDeDiferenciaCambiaria"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (PERIODO) TableName() string {
+	return "PERIODO"
+}
+
+// PeriodoRenglon representa la tabla PeriodoRenglon de la base de datos
+type PeriodoRenglon struct {
+	ConsecutivoPeriodo int       `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	ConsecutivoRenglon int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	Cuenta             string    `gorm:"column:Cuenta"`
+	TipoCuenta         string    `gorm:"column:TipoCuenta"`
+	FldTimeStamp       time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (PeriodoRenglon) TableName() string {
+	return "PeriodoRenglon"
+}
+
+// planillaForma00030 representa la tabla planillaForma00030 de la base de datos
+type planillaForma00030 struct {
+	ConsecutivoCompania                    int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	AnoAplicacion                          int        `gorm:"column:AnoAplicacion;primaryKey"`
+	Mes                                    int        `gorm:"column:Mes;primaryKey"`
+	SecuencialPlanilla                     int        `gorm:"column:SecuencialPlanilla;primaryKey"`
+	CalculoManualForma30                   string     `gorm:"column:CalculoManualForma30"`
+	EsDeclaracionSustitutiva               string     `gorm:"column:EsDeclaracionSustitutiva"`
+	NumeroDeclAnteriorH                    *string    `gorm:"column:NumeroDeclAnteriorH"`
+	NoDeclSustituida                       *string    `gorm:"column:NoDeclSustituida"`
+	FechaDeclSustitutiva                   *time.Time `gorm:"column:FechaDeclSustitutiva"`
+	FueModificadaLaInformacion             string     `gorm:"column:FueModificadaLaInformacion"`
+	PrimerNoFactura                        *string    `gorm:"column:PrimerNoFactura"`
+	UltimoNoFactura                        *string    `gorm:"column:UltimoNoFactura"`
+	PrimerNoControl                        *string    `gorm:"column:PrimerNoControl"`
+	UltimoNoControl                        *string    `gorm:"column:UltimoNoControl"`
+	VentasInternasNoGravadas               *float64   `gorm:"column:VentasInternasNoGravadas"`
+	VentasDeExportacion                    *float64   `gorm:"column:VentasDeExportacion"`
+	VentasAlicGeneralBase                  *float64   `gorm:"column:VentasAlicGeneralBase"`
+	VentasAlicGeneralDebito                *float64   `gorm:"column:VentasAlicGeneralDebito"`
+	VentasAlicAdicionalBase                *float64   `gorm:"column:VentasAlicAdicionalBase"`
+	VentasAlicAdicionalDebito              *float64   `gorm:"column:VentasAlicAdicionalDebito"`
+	VentasAlicReducidaBase                 *float64   `gorm:"column:VentasAlicReducidaBase"`
+	VentasAlicReducidaDebito               *float64   `gorm:"column:VentasAlicReducidaDebito"`
+	TotalVentasBaseDetermin                *float64   `gorm:"column:TotalVentasBaseDetermin"`
+	TotalVentasDebiDetermin                *float64   `gorm:"column:TotalVentasDebiDetermin"`
+	MontoEditableAjusteDebito              *float64   `gorm:"column:MontoEditableAjusteDebito"`
+	AjustesALosDebitos                     *float64   `gorm:"column:AjustesALosDebitos"`
+	TotalDebitosFiscales                   *float64   `gorm:"column:TotalDebitosFiscales"`
+	TotalVentasGravadasUlt3MEses           *float64   `gorm:"column:TotalVentasGravadasUlt3MEses"`
+	PorcentajeAplicable                    *float64   `gorm:"column:PorcentajeAplicable"`
+	TotalVentasUtl3Meses                   *float64   `gorm:"column:TotalVentasUtl3Meses"`
+	TotalCreditosParcialDeducibles         *float64   `gorm:"column:TotalCreditosParcialDeducibles"`
+	CreditosParcialesAjustados             *float64   `gorm:"column:CreditosParcialesAjustados"`
+	ComprasNoGravadas                      *float64   `gorm:"column:ComprasNoGravadas"`
+	ComprasExentasAntesProrrateo           *float64   `gorm:"column:ComprasExentasAntesProrrateo"`
+	ComprasImpAlicGralBase                 *float64   `gorm:"column:ComprasImpAlicGralBase"`
+	ComprasImpAlicGralCredito              *float64   `gorm:"column:ComprasImpAlicGralCredito"`
+	ComprasImpAlicAdicBase                 *float64   `gorm:"column:ComprasImpAlicAdicBase"`
+	ComprasImpAlicAdicCredito              *float64   `gorm:"column:ComprasImpAlicAdicCredito"`
+	ComprasImpAlicReduBase                 *float64   `gorm:"column:ComprasImpAlicReduBase"`
+	ComprasImpAlicReduCredito              *float64   `gorm:"column:ComprasImpAlicReduCredito"`
+	ComprasIntAlicGralBase                 *float64   `gorm:"column:ComprasIntAlicGralBase"`
+	ComprasIntAlicGralCredito              *float64   `gorm:"column:ComprasIntAlicGralCredito"`
+	ComprasIntAlicAdicBase                 *float64   `gorm:"column:ComprasIntAlicAdicBase"`
+	ComprasIntAlicAdicCredito              *float64   `gorm:"column:ComprasIntAlicAdicCredito"`
+	ComprasIntAlicReduBase                 *float64   `gorm:"column:ComprasIntAlicReduBase"`
+	ComprasIntAlicReduCredito              *float64   `gorm:"column:ComprasIntAlicReduCredito"`
+	TotalComprasDelPeriodoBase             *float64   `gorm:"column:TotalComprasDelPeriodoBase"`
+	TotalComprasDelPeriodoCred             *float64   `gorm:"column:TotalComprasDelPeriodoCred"`
+	CreditosDeduciblesProrrat              *float64   `gorm:"column:CreditosDeduciblesProrrat"`
+	TotalCreditosDeducibles                *float64   `gorm:"column:TotalCreditosDeducibles"`
+	ExcedenteDelMesAnterior                *float64   `gorm:"column:ExcedenteDelMesAnterior"`
+	MontoEditableAjusteCredito             *float64   `gorm:"column:MontoEditableAjusteCredito"`
+	AjustesALosCreditos                    *float64   `gorm:"column:AjustesALosCreditos"`
+	TotalCreditosFiscales                  *float64   `gorm:"column:TotalCreditosFiscales"`
+	TotalCuotaTributaria                   *float64   `gorm:"column:TotalCuotaTributaria"`
+	ImpPagadoDeclSustitutivas              *float64   `gorm:"column:ImpPagadoDeclSustitutivas"`
+	RetencionDescontadaEnSust              *float64   `gorm:"column:RetencionDescontadaEnSust"`
+	PercepcionDescontadaEnSust             *float64   `gorm:"column:PercepcionDescontadaEnSust"`
+	TotalCuotaDelPeriodo                   *float64   `gorm:"column:TotalCuotaDelPeriodo"`
+	TotalImpuestoDelPeriodo                *float64   `gorm:"column:TotalImpuestoDelPeriodo"`
+	ExcedenteCreditoMesSiguiente           *float64   `gorm:"column:ExcedenteCreditoMesSiguiente"`
+	RetencionesPorDescontar                *float64   `gorm:"column:RetencionesPorDescontar"`
+	RetencionesDescontadas                 *float64   `gorm:"column:RetencionesDescontadas"`
+	SubTotalImpuestoAPagar                 *float64   `gorm:"column:SubTotalImpuestoAPagar"`
+	PercepcionesAnticipadas                *float64   `gorm:"column:PercepcionesAnticipadas"`
+	PercepcionesEstaDeclarac               *float64   `gorm:"column:PercepcionesEstaDeclarac"`
+	SubTotal56Menos58                      *float64   `gorm:"column:SubTotal56Menos58"`
+	ImpPagadoPorCuentaDe3ros               *float64   `gorm:"column:ImpPagadoPorCuentaDe3ros"`
+	ImpPercibidoEnVentas                   *float64   `gorm:"column:ImpPercibidoEnVentas"`
+	TotalAPagar                            *float64   `gorm:"column:TotalAPagar"`
+	MontoEnEfectivo                        *float64   `gorm:"column:MontoEnEfectivo"`
+	MontoEnChequeGerencia                  *float64   `gorm:"column:MontoEnChequeGerencia"`
+	MontoEnBonos                           *float64   `gorm:"column:MontoEnBonos"`
+	MontoEnCertificado                     *float64   `gorm:"column:MontoEnCertificado"`
+	CiudadDePago                           *string    `gorm:"column:CiudadDePago"`
+	FechaDePago                            *time.Time `gorm:"column:FechaDePago"`
+	DevolucionSolicitada                   *float64   `gorm:"column:DevolucionSolicitada"`
+	RetencionesAcumPorDescontar            *float64   `gorm:"column:RetencionesAcumPorDescontar"`
+	RetencionesDelPeriodo                  *float64   `gorm:"column:RetencionesDelPeriodo"`
+	SaldoRetencionesNoAplicadas            *float64   `gorm:"column:SaldoRetencionesNoAplicadas"`
+	PercepcionesAcumPorDescontar           *float64   `gorm:"column:PercepcionesAcumPorDescontar"`
+	PercepcionesDelPeriodo                 *float64   `gorm:"column:PercepcionesDelPeriodo"`
+	SaldoPercepcionesNoAplicadas           *float64   `gorm:"column:SaldoPercepcionesNoAplicadas"`
+	Periodo                                *string    `gorm:"column:Periodo"`
+	NombreRepresentanteLegal               string     `gorm:"column:NombreRepresentanteLegal"`
+	NombreContador                         string     `gorm:"column:NombreContador"`
+	RetencionDescontadaEnExcesoPeriodosAnt *float64   `gorm:"column:RetencionDescontadaEnExcesoPeriodosAnt"`
+	RetencionesDejadasDeDescontar          *float64   `gorm:"column:RetencionesDejadasDeDescontar"`
+	VentasAlicuotaGeneralBase              *float64   `gorm:"column:VentasAlicuotaGeneralBase"`
+	VentasAlicEspecial1Base                *float64   `gorm:"column:VentasAlicEspecial1Base"`
+	VentasAlicEspecial2Base                *float64   `gorm:"column:VentasAlicEspecial2Base"`
+	VentasAlicuotaGeneralDebito            *float64   `gorm:"column:VentasAlicuotaGeneralDebito"`
+	VentasAlicEspecial1Debito              *float64   `gorm:"column:VentasAlicEspecial1Debito"`
+	VentasAlicEspecial2Debito              *float64   `gorm:"column:VentasAlicEspecial2Debito"`
+	ComprasIntAlicGeneralBase              *float64   `gorm:"column:ComprasIntAlicGeneralBase"`
+	ComprasIntAlicEsp1Base                 *float64   `gorm:"column:ComprasIntAlicEsp1Base"`
+	ComprasIntAlicEsp2Base                 *float64   `gorm:"column:ComprasIntAlicEsp2Base"`
+	ComprasIntAlicGeneralCredito           *float64   `gorm:"column:ComprasIntAlicGeneralCredito"`
+	ComprasIntAlicEsp1Credito              *float64   `gorm:"column:ComprasIntAlicEsp1Credito"`
+	ComprasIntAlicEsp2Credito              *float64   `gorm:"column:ComprasIntAlicEsp2Credito"`
+	FechaDesdeAplicacion                   *time.Time `gorm:"column:FechaDesdeAplicacion"`
+	FechaHastaAplicacion                   *time.Time `gorm:"column:FechaHastaAplicacion"`
+	NombreOperador                         *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion                *time.Time `gorm:"column:FechaUltimaModificacion"`
+	DetalleCasilla66Retencion              *float64   `gorm:"column:DetalleCasilla66Retencion"`
+	DetalleCasilla66Anticipo               *float64   `gorm:"column:DetalleCasilla66Anticipo"`
+	FldTimeStamp                           time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (planillaForma00030) TableName() string {
+	return "planillaForma00030"
+}
+
+// plantillaRET representa la tabla plantillaRET de la base de datos
+type plantillaRET struct {
+	Codigo                  string     `gorm:"column:Codigo;primaryKey"`
+	TipoDePersona           *string    `gorm:"column:TipoDePersona"`
+	Articulo                *string    `gorm:"column:Articulo"`
+	Numeral                 *string    `gorm:"column:Numeral"`
+	Literal                 *string    `gorm:"column:Literal"`
+	Descripcion             *string    `gorm:"column:Descripcion"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (plantillaRET) TableName() string {
+	return "plantillaRET"
+}
+
+// ProductoCompuesto representa la tabla ProductoCompuesto de la base de datos
+type ProductoCompuesto struct {
+	ConsecutivoCompania       int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoConexionConElMaster string    `gorm:"column:CodigoConexionConElMaster;primaryKey"`
+	CodigoArticulo            string    `gorm:"column:CodigoArticulo;primaryKey"`
+	Cantidad                  *int      `gorm:"column:Cantidad"`
+	FldTimeStamp              time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (ProductoCompuesto) TableName() string {
+	return "ProductoCompuesto"
+}
+
+// renglonARCV representa la tabla renglonARCV de la base de datos
+type renglonARCV struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroArcv          string    `gorm:"column:NumeroArcv;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	MesParaArcv         *string   `gorm:"column:MesParaArcv"`
+	PagadoAbonado       *float64  `gorm:"column:PagadoAbonado"`
+	BaseImponible       *float64  `gorm:"column:BaseImponible"`
+	ImpuestoRetenido    *float64  `gorm:"column:ImpuestoRetenido"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonARCV) TableName() string {
+	return "renglonARCV"
+}
+
+// renglonCobroDeFactura representa la tabla renglonCobroDeFactura de la base de datos
+type renglonCobroDeFactura struct {
+	ConsecutivoCompania       int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroFactura             string    `gorm:"column:NumeroFactura;primaryKey"`
+	TipoDeDocumento           string    `gorm:"column:TipoDeDocumento;primaryKey"`
+	ConsecutivoRenglon        int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoFormaDelCobro       *string   `gorm:"column:CodigoFormaDelCobro"`
+	NumeroDelDocumento        *string   `gorm:"column:NumeroDelDocumento"`
+	CodigoBanco               *int      `gorm:"column:CodigoBanco"`
+	Monto                     *float64  `gorm:"column:Monto"`
+	CodigoPuntoDeVenta        *int      `gorm:"column:CodigoPuntoDeVenta"`
+	NumeroDocumentoAprobacion *string   `gorm:"column:NumeroDocumentoAprobacion"`
+	CodigoMoneda              *string   `gorm:"column:CodigoMoneda"`
+	CambioAMonedaLocal        *float64  `gorm:"column:CambioAMonedaLocal"`
+	FldTimeStamp              time.Time `gorm:"column:fldTimeStamp"`
+	InfoAdicional             *string   `gorm:"column:InfoAdicional"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonCobroDeFactura) TableName() string {
+	return "renglonCobroDeFactura"
+}
+
+// RenglonConteoFisico representa la tabla RenglonConteoFisico de la base de datos
+type RenglonConteoFisico struct {
+	ConsecutivoCompania      int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoConteo        int       `gorm:"column:ConsecutivoConteo;primaryKey"`
+	ConsecutivoRenglon       int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoArticulo           string    `gorm:"column:CodigoArticulo"`
+	ExistenciaEnElComputador *float64  `gorm:"column:ExistenciaEnElComputador"`
+	ExistenciaFisica         *float64  `gorm:"column:ExistenciaFisica"`
+	Diferencia               *float64  `gorm:"column:Diferencia"`
+	TipoArticuloInv          string    `gorm:"column:TipoArticuloInv"`
+	Serial                   string    `gorm:"column:Serial;primaryKey"`
+	Rollo                    string    `gorm:"column:Rollo;primaryKey"`
+	FldTimeStamp             time.Time `gorm:"column:fldTimeStamp"`
+	CodigoLote               *string   `gorm:"column:CodigoLote"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonConteoFisico) TableName() string {
+	return "RenglonConteoFisico"
+}
+
+// RenglonContrato representa la tabla RenglonContrato de la base de datos
+type RenglonContrato struct {
+	ConsecutivoCompania  int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroContrato       string     `gorm:"column:NumeroContrato;primaryKey"`
+	ConsecutivoContrato  int        `gorm:"column:ConsecutivoContrato;primaryKey"`
+	Articulo             *string    `gorm:"column:Articulo"`
+	Descripcion          *string    `gorm:"column:Descripcion"`
+	CambioDeValorDelItem *string    `gorm:"column:CambioDeValorDelItem"`
+	Imponible            *float64   `gorm:"column:Imponible"`
+	Cantidad             float64    `gorm:"column:Cantidad"`
+	Periodicidad         *string    `gorm:"column:Periodicidad"`
+	PeriodoDeAplicacion  *string    `gorm:"column:PeriodoDeAplicacion"`
+	FechaDeInicio        *time.Time `gorm:"column:FechaDeInicio"`
+	FechaFinal           *time.Time `gorm:"column:FechaFinal"`
+	FechaPrimeraFactura  *time.Time `gorm:"column:FechaPrimeraFactura"`
+	PorcentajeDescuento  *float64   `gorm:"column:PorcentajeDescuento"`
+	FldTimeStamp         time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonContrato) TableName() string {
+	return "RenglonContrato"
+}
+
+// renglonCotizacion representa la tabla renglonCotizacion de la base de datos
+type renglonCotizacion struct {
+	ConsecutivoCompania     int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroCotizacion        string    `gorm:"column:NumeroCotizacion;primaryKey"`
+	ConsecutivoRenglon      int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoArticulo          *string   `gorm:"column:CodigoArticulo"`
+	Descripcion             *string   `gorm:"column:Descripcion"`
+	AlicuotaIVA             *string   `gorm:"column:AlicuotaIVA"`
+	Cantidad                float64   `gorm:"column:Cantidad"`
+	PrecioSinIVA            *float64  `gorm:"column:PrecioSinIVA"`
+	PrecioConIVA            *float64  `gorm:"column:PrecioConIVA"`
+	PorcentajeDescuento     *float64  `gorm:"column:PorcentajeDescuento"`
+	TotalRenglon            *float64  `gorm:"column:TotalRenglon"`
+	PorcentajeBaseImponible *float64  `gorm:"column:PorcentajeBaseImponible"`
+	Serial                  string    `gorm:"column:Serial"`
+	Rollo                   string    `gorm:"column:Rollo"`
+	PorcentajeAlicuota      *float64  `gorm:"column:PorcentajeAlicuota"`
+	CantidadDespachada      *float64  `gorm:"column:CantidadDespachada"`
+	FldTimeStamp            time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonCotizacion) TableName() string {
+	return "renglonCotizacion"
+}
+
+// renglonDetalleDeOtrosCargosFactura representa la tabla renglonDetalleDeOtrosCargosFactura de la base de datos
+type renglonDetalleDeOtrosCargosFactura struct {
+	ConsecutivoCompania      int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroFactura            string    `gorm:"column:NumeroFactura;primaryKey"`
+	TipoDeDocumento          string    `gorm:"column:TipoDeDocumento;primaryKey"`
+	ConsecutivoRenglon       int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoDeCargo            *string   `gorm:"column:CodigoDeCargo"`
+	Descripcion              *string   `gorm:"column:Descripcion"`
+	SeCalculaEnBaseA         *string   `gorm:"column:SeCalculaEnBaseA"`
+	ComoAplicaAlTotalFactura *string   `gorm:"column:ComoAplicaAlTotalFactura"`
+	TotalRenglon             *float64  `gorm:"column:TotalRenglon"`
+	FldTimeStamp             time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonDetalleDeOtrosCargosFactura) TableName() string {
+	return "renglonDetalleDeOtrosCargosFactura"
+}
+
+// RenglonExistenciaAlmacen representa la tabla RenglonExistenciaAlmacen de la base de datos
+type RenglonExistenciaAlmacen struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoAlmacen       string    `gorm:"column:CodigoAlmacen"`
+	CodigoArticulo      string    `gorm:"column:CodigoArticulo;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoSerial        string    `gorm:"column:CodigoSerial;primaryKey"`
+	CodigoRollo         string    `gorm:"column:CodigoRollo;primaryKey"`
+	Cantidad            float64   `gorm:"column:Cantidad"`
+	Ubicacion           *string   `gorm:"column:Ubicacion"`
+	ConsecutivoAlmacen  int       `gorm:"column:ConsecutivoAlmacen;primaryKey"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonExistenciaAlmacen) TableName() string {
+	return "RenglonExistenciaAlmacen"
+}
+
+// renglonFactura representa la tabla renglonFactura de la base de datos
+type renglonFactura struct {
+	ConsecutivoCompania         int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroFactura               string    `gorm:"column:NumeroFactura;primaryKey"`
+	TipoDeDocumento             string    `gorm:"column:TipoDeDocumento;primaryKey"`
+	ConsecutivoRenglon          int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	Articulo                    *string   `gorm:"column:Articulo"`
+	Descripcion                 *string   `gorm:"column:Descripcion"`
+	CodigoVendedor1             *string   `gorm:"column:CodigoVendedor1"`
+	CodigoVendedor2             *string   `gorm:"column:CodigoVendedor2"`
+	CodigoVendedor3             *string   `gorm:"column:CodigoVendedor3"`
+	AlicuotaIVA                 *string   `gorm:"column:AlicuotaIVA"`
+	Cantidad                    float64   `gorm:"column:Cantidad"`
+	PrecioSinIVA                *float64  `gorm:"column:PrecioSinIVA"`
+	PrecioConIVA                *float64  `gorm:"column:PrecioConIVA"`
+	PorcentajeDescuento         *float64  `gorm:"column:PorcentajeDescuento"`
+	TotalRenglon                *float64  `gorm:"column:TotalRenglon"`
+	PorcentajeBaseImponible     *float64  `gorm:"column:PorcentajeBaseImponible"`
+	Serial                      string    `gorm:"column:Serial"`
+	Rollo                       string    `gorm:"column:Rollo"`
+	CampoExtraEnRenglonFactura1 *string   `gorm:"column:CampoExtraEnRenglonFactura1"`
+	CampoExtraEnRenglonFactura2 *string   `gorm:"column:CampoExtraEnRenglonFactura2"`
+	PorcentajeAlicuota          *float64  `gorm:"column:PorcentajeAlicuota"`
+	FldTimeStamp                time.Time `gorm:"column:fldTimeStamp"`
+	LoteDeInventario            *string   `gorm:"column:LoteDeInventario"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonFactura) TableName() string {
+	return "renglonFactura"
+}
+
+// RenglonGrupoColor representa la tabla RenglonGrupoColor de la base de datos
+type RenglonGrupoColor struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoGrupo         string    `gorm:"column:CodigoGrupo;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoColor         *string   `gorm:"column:CodigoColor"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonGrupoColor) TableName() string {
+	return "RenglonGrupoColor"
+}
+
+// RenglonGrupoTalla representa la tabla RenglonGrupoTalla de la base de datos
+type RenglonGrupoTalla struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	CodigoGrupo         string    `gorm:"column:CodigoGrupo;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoTalla         *string   `gorm:"column:CodigoTalla"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonGrupoTalla) TableName() string {
+	return "RenglonGrupoTalla"
+}
+
+// RenglonImpuestoMunicipalRet representa la tabla RenglonImpuestoMunicipalRet de la base de datos
+type RenglonImpuestoMunicipalRet struct {
+	ConsecutivoCompania     int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Consecutivo             int        `gorm:"column:Consecutivo;primaryKey"`
+	ConsecutivoCxp          int        `gorm:"column:ConsecutivoCxp;primaryKey"`
+	CodigoRetencion         string     `gorm:"column:CodigoRetencion"`
+	MontoBaseImponible      float64    `gorm:"column:MontoBaseImponible"`
+	AlicuotaRetencion       float64    `gorm:"column:AlicuotaRetencion"`
+	MontoRetencion          float64    `gorm:"column:MontoRetencion"`
+	TipoDeTransaccion       *string    `gorm:"column:TipoDeTransaccion"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonImpuestoMunicipalRet) TableName() string {
+	return "RenglonImpuestoMunicipalRet"
+}
+
+// RenglonNotaES representa la tabla RenglonNotaES de la base de datos
+type RenglonNotaES struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroDocumento     string    `gorm:"column:NumeroDocumento;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoArticulo      string    `gorm:"column:CodigoArticulo"`
+	Cantidad            float64   `gorm:"column:Cantidad"`
+	TipoArticuloInv     string    `gorm:"column:TipoArticuloInv"`
+	Serial              string    `gorm:"column:Serial"`
+	Rollo               string    `gorm:"column:Rollo"`
+	CostoUnitario       *float64  `gorm:"column:CostoUnitario"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+	CostoUnitarioME     *float64  `gorm:"column:CostoUnitarioME"`
+	LoteDeInventario    *string   `gorm:"column:LoteDeInventario"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonNotaES) TableName() string {
+	return "RenglonNotaES"
+}
+
+// renglonOtrosCargosDeCotizacion representa la tabla renglonOtrosCargosDeCotizacion de la base de datos
+type renglonOtrosCargosDeCotizacion struct {
+	ConsecutivoCompania         int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroCotizacion            string    `gorm:"column:NumeroCotizacion;primaryKey"`
+	ConsecutivoRenglon          int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoDeCargo               *string   `gorm:"column:CodigoDeCargo"`
+	Descripcion                 *string   `gorm:"column:Descripcion"`
+	SeCalculaEnBaseA            *string   `gorm:"column:SeCalculaEnBaseA"`
+	ComoAplicaAlTotalCotizacion *string   `gorm:"column:ComoAplicaAlTotalCotizacion"`
+	TotalRenglon                *float64  `gorm:"column:TotalRenglon"`
+	FldTimeStamp                time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (renglonOtrosCargosDeCotizacion) TableName() string {
+	return "renglonOtrosCargosDeCotizacion"
+}
+
+// RenglonTransferencia representa la tabla RenglonTransferencia de la base de datos
+type RenglonTransferencia struct {
+	ConsecutivoCompania int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroDocumento     string    `gorm:"column:NumeroDocumento;primaryKey"`
+	ConsecutivoRenglon  int       `gorm:"column:ConsecutivoRenglon;primaryKey"`
+	CodigoArticulo      string    `gorm:"column:CodigoArticulo"`
+	Cantidad            float64   `gorm:"column:Cantidad"`
+	Serial              string    `gorm:"column:Serial;primaryKey"`
+	Rollo               string    `gorm:"column:Rollo;primaryKey"`
+	TipoArticuloInv     *string   `gorm:"column:TipoArticuloInv"`
+	FldTimeStamp        time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RenglonTransferencia) TableName() string {
+	return "RenglonTransferencia"
+}
+
+// RetDocumentoPagado representa la tabla RetDocumentoPagado de la base de datos
+type RetDocumentoPagado struct {
+	ConsecutivoCompania             int       `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroComprobante               int       `gorm:"column:NumeroComprobante;primaryKey"`
+	SecuencialDocPagado             int       `gorm:"column:SecuencialDocPagado;primaryKey"`
+	NumeroDelDocumento              *string   `gorm:"column:NumeroDelDocumento"`
+	NumeroControl                   *string   `gorm:"column:NumeroControl"`
+	CodigoRetencion                 *string   `gorm:"column:CodigoRetencion"`
+	MontoOriginal                   *float64  `gorm:"column:MontoOriginal"`
+	MontoBaseImponible              *float64  `gorm:"column:MontoBaseImponible"`
+	MontoRetencion                  *float64  `gorm:"column:MontoRetencion"`
+	TipoOperacion                   string    `gorm:"column:TipoOperacion"`
+	PorcentajeDeRetencion           *float64  `gorm:"column:PorcentajeDeRetencion"`
+	CodigoProveedorOriginalServicio *string   `gorm:"column:CodigoProveedorOriginalServicio"`
+	EsUnaCuentaATerceros            string    `gorm:"column:EsUnaCuentaATerceros"`
+	FldTimeStamp                    time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RetDocumentoPagado) TableName() string {
+	return "RetDocumentoPagado"
+}
+
+// RetirosACuenta representa la tabla RetirosACuenta de la base de datos
+type RetirosACuenta struct {
+	ConsecutivoCompania int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	ConsecutivoRetiro   int        `gorm:"column:ConsecutivoRetiro;primaryKey"`
+	CodigoVendedor      *string    `gorm:"column:CodigoVendedor"`
+	Fecha               *time.Time `gorm:"column:Fecha"`
+	Monto               *float64   `gorm:"column:Monto"`
+	FldTimeStamp        time.Time  `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor int        `gorm:"column:ConsecutivoVendedor"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RetirosACuenta) TableName() string {
+	return "RetirosACuenta"
+}
+
+// RetPago representa la tabla RetPago de la base de datos
+type RetPago struct {
+	ConsecutivoCompania       int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroComprobante         int        `gorm:"column:NumeroComprobante;primaryKey"`
+	NumeroReferencia          string     `gorm:"column:NumeroReferencia"`
+	Fecha                     time.Time  `gorm:"column:Fecha"`
+	MesAplicacion             *int       `gorm:"column:MesAplicacion"`
+	AnoAplicacion             *int       `gorm:"column:AnoAplicacion"`
+	CodigoProveedor           *string    `gorm:"column:CodigoProveedor"`
+	CodigoLote                *string    `gorm:"column:CodigoLote"`
+	GeneradoPor               *string    `gorm:"column:GeneradoPor"`
+	CampoExtra1               *string    `gorm:"column:CampoExtra1"`
+	CampoExtra2               *string    `gorm:"column:CampoExtra2"`
+	CampoExtra3               *string    `gorm:"column:CampoExtra3"`
+	OrdenadoPorCodRet         string     `gorm:"column:OrdenadoPorCodRet"`
+	PrimerNumeroCompRetencion *int       `gorm:"column:PrimerNumeroCompRetencion"`
+	NroComprobanteRetISLR     *int       `gorm:"column:NroComprobanteRetISLR"`
+	Origen                    *string    `gorm:"column:Origen"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (RetPago) TableName() string {
+	return "RetPago"
+}
+
+// seguridadCompania representa la tabla seguridadCompania de la base de datos
+type seguridadCompania struct {
+	CodigoCompania          string     `gorm:"column:CodigoCompania;primaryKey"`
+	UsuariosConAcceso       *string    `gorm:"column:UsuariosConAcceso"`
+	UsuariosConAccesoLinea2 *string    `gorm:"column:UsuariosConAccesoLinea2"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (seguridadCompania) TableName() string {
+	return "seguridadCompania"
+}
+
+// sysdiagrams representa la tabla sysdiagrams de la base de datos
+type sysdiagrams struct {
+	Name        string `gorm:"column:name"`
+	PrincipalId int    `gorm:"column:principal_id"`
+	DiagramId   int    `gorm:"column:diagram_id;primaryKey"`
+	Version     *int   `gorm:"column:version"`
+	Definition  []byte `gorm:"column:definition"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (sysdiagrams) TableName() string {
+	return "sysdiagrams"
+}
+
+// tblCuentaTemp representa la tabla tblCuentaTemp de la base de datos
+type tblCuentaTemp struct {
+	ConsecutivoPeriodo                int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	Codigo                            string     `gorm:"column:Codigo;primaryKey"`
+	Descripcion                       string     `gorm:"column:Descripcion"`
+	NaturalezaDeLaCuenta              *string    `gorm:"column:NaturalezaDeLaCuenta"`
+	TieneSubCuentas                   string     `gorm:"column:TieneSubCuentas"`
+	TieneAuxiliar                     string     `gorm:"column:TieneAuxiliar"`
+	GrupoAuxiliar                     *string    `gorm:"column:GrupoAuxiliar"`
+	VieneDelPeriodoAnterior           string     `gorm:"column:VieneDelPeriodoAnterior"`
+	StatusCuenta                      *string    `gorm:"column:StatusCuenta"`
+	MetAjusteYactivoStr               *string    `gorm:"column:MetAjusteYactivoStr"`
+	TipoDeInventario                  *string    `gorm:"column:TipoDeInventario"`
+	SeccionEstadoDemostrativo         *string    `gorm:"column:SeccionEstadoDemostrativo"`
+	CostoDeVentas                     *string    `gorm:"column:CostoDeVentas"`
+	Gastos                            *string    `gorm:"column:Gastos"`
+	IngresosPropiosActividad          *string    `gorm:"column:IngresosPropiosActividad"`
+	ConciliacionInfo2000              *string    `gorm:"column:ConciliacionInfo2000"`
+	EsActivoFijo                      string     `gorm:"column:EsActivoFijo"`
+	SaldoInicial                      *float64   `gorm:"column:SaldoInicial"`
+	NombreOperador                    *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion           *time.Time `gorm:"column:FechaUltimaModificacion"`
+	CodigoGrupoActivo                 *int       `gorm:"column:CodigoGrupoActivo"`
+	TipoDeCuentaFiscal                *string    `gorm:"column:TipoDeCuentaFiscal"`
+	TipoDeCuentaDpc10                 *string    `gorm:"column:TipoDeCuentaDpc10"`
+	Dpc10MetodoAjuste                 *string    `gorm:"column:Dpc10MetodoAjuste"`
+	MetodoAjuste                      *string    `gorm:"column:MetodoAjuste"`
+	DpcCodigoGrupoActivoFijo          *int       `gorm:"column:DpcCodigoGrupoActivoFijo"`
+	CodigoGrupoAjustaPorIpc           *int       `gorm:"column:CodigoGrupoAjustaPorIpc"`
+	TipoDeOtrasNoMonetarias           *string    `gorm:"column:TipoDeOtrasNoMonetarias"`
+	TipoRefleja                       *string    `gorm:"column:TipoRefleja"`
+	CuentaReflejaAlDebe               *string    `gorm:"column:CuentaReflejaAlDebe"`
+	CuentaReflejaAlHaber              *string    `gorm:"column:CuentaReflejaAlHaber"`
+	CodigoNiif                        string     `gorm:"column:CodigoNiif"`
+	TipoCuentaParaCosto               string     `gorm:"column:TipoCuentaParaCosto"`
+	ConsecutivoCriterioDeDistribucion int        `gorm:"column:ConsecutivoCriterioDeDistribucion"`
+	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania"`
+	ConsecutivoElementoDelCosto       int        `gorm:"column:ConsecutivoElementoDelCosto"`
+	ID                                string     `gorm:"column:ID;primaryKey"`
+	EsMonedaExtranjera                string     `gorm:"column:EsMonedaExtranjera"`
+	CodigoMoneda                      string     `gorm:"column:CodigoMoneda"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblCuentaTemp) TableName() string {
+	return "tblCuentaTemp"
+}
+
+// tblDepMensualDetTemp representa la tabla tblDepMensualDetTemp de la base de datos
+type tblDepMensualDetTemp struct {
+	ConsecutivoPeriodo             int        `gorm:"column:ConsecutivoPeriodo;primaryKey"`
+	CodigoGrupoActivoFijo          int        `gorm:"column:CodigoGrupoActivoFijo"`
+	CodigoAuxiliar                 string     `gorm:"column:CodigoAuxiliar;primaryKey"`
+	Descripcion                    string     `gorm:"column:Descripcion"`
+	FechaAdquisicion               *time.Time `gorm:"column:FechaAdquisicion"`
+	CostoAdquisicion               *float64   `gorm:"column:CostoAdquisicion"`
+	DepreciacionContable           *float64   `gorm:"column:DepreciacionContable"`
+	DepreciacionContableAno        *float64   `gorm:"column:DepreciacionContableAno"`
+	VidaUtilEnMeses                *int       `gorm:"column:VidaUtilEnMeses"`
+	ValordeRescate                 *float64   `gorm:"column:ValordeRescate"`
+	FechaInicioUso                 *time.Time `gorm:"column:FechaInicioUso"`
+	Retirado                       string     `gorm:"column:Retirado"`
+	FechaRetiro                    *time.Time `gorm:"column:FechaRetiro"`
+	MotivoRetiro                   *string    `gorm:"column:MotivoRetiro"`
+	TipoReclasificacion            *string    `gorm:"column:TipoReclasificacion"`
+	PrecioDeVentaEnajenacion       *float64   `gorm:"column:PrecioDeVentaEnajenacion"`
+	CalculoManual                  string     `gorm:"column:CalculoManual"`
+	VieneDelAnoAnterior            string     `gorm:"column:VieneDelAnoAnterior"`
+	Contabilizado                  string     `gorm:"column:Contabilizado"`
+	NroComprobante                 *string    `gorm:"column:NroComprobante"`
+	CuentaDeMovimientoAsociada     string     `gorm:"column:CuentaDeMovimientoAsociada;primaryKey"`
+	IngresadoDesdeCompApertura     string     `gorm:"column:IngresadoDesdeCompApertura"`
+	IngresadoPorCargaInicial       string     `gorm:"column:IngresadoPorCargaInicial"`
+	CentroDeCostos                 *string    `gorm:"column:CentroDeCostos"`
+	NroComprobanteDelRetiro        *string    `gorm:"column:NroComprobanteDelRetiro"`
+	CodigoAuxiliarOrigenDelRetiro  *string    `gorm:"column:CodigoAuxiliarOrigenDelRetiro"`
+	FechaAvaluo                    *time.Time `gorm:"column:FechaAvaluo"`
+	CostoCorriente                 *float64   `gorm:"column:CostoCorriente"`
+	DepreciacionContableNIIF       *float64   `gorm:"column:DepreciacionContableNIIF"`
+	DepreciacionContableAnoNIIF    *float64   `gorm:"column:DepreciacionContableAnoNIIF"`
+	VidaUtilNIIF                   *int       `gorm:"column:VidaUtilNIIF"`
+	EsRevaluado                    string     `gorm:"column:EsRevaluado"`
+	ValorRescateNIIF               *float64   `gorm:"column:ValorRescateNIIF"`
+	NroComprobanteDeRevalorizacion *string    `gorm:"column:NroComprobanteDeRevalorizacion"`
+	NombreOperador                 *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion        *time.Time `gorm:"column:FechaUltimaModificacion"`
+	ID                             string     `gorm:"column:ID;primaryKey"`
+	DepreciacionMensual            *float64   `gorm:"column:DepreciacionMensual"`
+	FechaDepreciacionDesde         *time.Time `gorm:"column:FechaDepreciacionDesde"`
+	FechaDepreciacionHasta         *time.Time `gorm:"column:FechaDepreciacionHasta"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblDepMensualDetTemp) TableName() string {
+	return "tblDepMensualDetTemp"
+}
+
+// tblDepMensualResTemp representa la tabla tblDepMensualResTemp de la base de datos
+type tblDepMensualResTemp struct {
+	CodigoGrupoActivoFijo       int      `gorm:"column:CodigoGrupoActivoFijo;primaryKey"`
+	SubTotalCosto               *float64 `gorm:"column:SubTotalCosto"`
+	SubTotalDepreciacionAcum    *float64 `gorm:"column:SubTotalDepreciacionAcum"`
+	SubTotalDepreciacionPeriodo *float64 `gorm:"column:SubTotalDepreciacionPeriodo"`
+	ID                          string   `gorm:"column:ID;primaryKey"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblDepMensualResTemp) TableName() string {
+	return "tblDepMensualResTemp"
+}
+
+// tblInformeCxCCxP representa la tabla tblInformeCxCCxP de la base de datos
+type tblInformeCxCCxP struct {
+	ConsecutivoCompania *int       `gorm:"column:ConsecutivoCompania"`
+	Idusuario           *string    `gorm:"column:Idusuario"`
+	Idmodulo            *string    `gorm:"column:Idmodulo"`
+	Numero              *string    `gorm:"column:Numero"`
+	Status              *string    `gorm:"column:Status"`
+	CodigoCliProv       *string    `gorm:"column:CodigoCliProv"`
+	Origen              *string    `gorm:"column:Origen"`
+	Tipo                *string    `gorm:"column:Tipo"`
+	MontoExento         *float64   `gorm:"column:MontoExento"`
+	MontoGravado        *float64   `gorm:"column:MontoGravado"`
+	MontoIva            *float64   `gorm:"column:MontoIva"`
+	MontoAbonado        *float64   `gorm:"column:MontoAbonado"`
+	Fecha               *time.Time `gorm:"column:Fecha"`
+	FechaCancelacion    *time.Time `gorm:"column:FechaCancelacion"`
+	FechaVencimiento    *time.Time `gorm:"column:FechaVencimiento"`
+	FechaAnulacion      *time.Time `gorm:"column:FechaAnulacion"`
+	Moneda              *string    `gorm:"column:Moneda"`
+	CambioAbolivares    *float64   `gorm:"column:CambioAbolivares"`
+	CodigoMoneda        *string    `gorm:"column:CodigoMoneda"`
+	FldTimeStamp        time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblInformeCxCCxP) TableName() string {
+	return "tblInformeCxCCxP"
+}
+
+// tblMovAuxiliarCentroDeCostoTemp representa la tabla tblMovAuxiliarCentroDeCostoTemp de la base de datos
+type tblMovAuxiliarCentroDeCostoTemp struct {
+	CodeAux       *string  `gorm:"column:CodeAux"`
+	Code          *string  `gorm:"column:Code"`
+	SubTotalDebe  *float64 `gorm:"column:SubTotalDebe"`
+	SubTotalHaber *float64 `gorm:"column:SubTotalHaber"`
+	ID            *string  `gorm:"column:ID"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblMovAuxiliarCentroDeCostoTemp) TableName() string {
+	return "tblMovAuxiliarCentroDeCostoTemp"
+}
+
+// tblMovimientoContableTemp representa la tabla tblMovimientoContableTemp de la base de datos
+type tblMovimientoContableTemp struct {
+	Code                 *string  `gorm:"column:Code"`
+	SubTotalDebe         *float64 `gorm:"column:SubTotalDebe"`
+	SubTotalHaber        *float64 `gorm:"column:SubTotalHaber"`
+	ID                   *string  `gorm:"column:ID"`
+	CodeAux              *string  `gorm:"column:CodeAux"`
+	SubTotalSaldoInicial *float64 `gorm:"column:SubTotalSaldoInicial"`
+	ConsecutivoPeriodo   *int     `gorm:"column:ConsecutivoPeriodo"`
+	AplicaReconversion   *string  `gorm:"column:AplicaReconversion"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblMovimientoContableTemp) TableName() string {
+	return "tblMovimientoContableTemp"
+}
+
+// tblReporteComparativoFinal representa la tabla tblReporteComparativoFinal de la base de datos
+type tblReporteComparativoFinal struct {
+	Codigo               string   `gorm:"column:Codigo"`
+	Descripcion          *string  `gorm:"column:Descripcion"`
+	Saldomes1            *float64 `gorm:"column:saldomes1"`
+	Saldomes2            *float64 `gorm:"column:saldomes2"`
+	NaturalezaDeLaCuenta *string  `gorm:"column:NaturalezaDeLaCuenta"`
+	TieneSubCuentas      *string  `gorm:"column:TieneSubCuentas"`
+	ID                   string   `gorm:"column:ID"`
+	Grupo                *string  `gorm:"column:Grupo"`
+	ConsecutivoPeriodo   *int     `gorm:"column:ConsecutivoPeriodo"`
+	GrupoAuxiliar        *string  `gorm:"column:GrupoAuxiliar"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblReporteComparativoFinal) TableName() string {
+	return "tblReporteComparativoFinal"
+}
+
+// tblSaldoContableComparativoTemp representa la tabla tblSaldoContableComparativoTemp de la base de datos
+type tblSaldoContableComparativoTemp struct {
+	Codigo                  string   `gorm:"column:Codigo"`
+	Descripcion             *string  `gorm:"column:Descripcion"`
+	NaturalezaDeLaCuenta    *string  `gorm:"column:NaturalezaDeLaCuenta"`
+	TieneSubCuentas         *string  `gorm:"column:TieneSubCuentas"`
+	SaldoInicial            *float64 `gorm:"column:SaldoInicial"`
+	SubTotalDebe            *float64 `gorm:"column:SubTotalDebe"`
+	SubTotalHaber           *float64 `gorm:"column:SubTotalHaber"`
+	Saldo                   *float64 `gorm:"column:Saldo"`
+	ID                      string   `gorm:"column:ID"`
+	SaldoAntesDeCambioSigno *float64 `gorm:"column:SaldoAntesDeCambioSigno"`
+	CodeAux                 string   `gorm:"column:CodeAux"`
+	Grupo                   *string  `gorm:"column:Grupo"`
+	ConsecutivoPeriodo      *int     `gorm:"column:ConsecutivoPeriodo"`
+	GrupoAuxiliar           *string  `gorm:"column:GrupoAuxiliar"`
+	AplicaReconversion      *string  `gorm:"column:AplicaReconversion"`
+	IDFECHA                 int      `gorm:"column:ID_FECHA"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblSaldoContableComparativoTemp) TableName() string {
+	return "tblSaldoContableComparativoTemp"
+}
+
+// tblSaldoContableTemp representa la tabla tblSaldoContableTemp de la base de datos
+type tblSaldoContableTemp struct {
+	Codigo                  string   `gorm:"column:Codigo;primaryKey"`
+	Descripcion             *string  `gorm:"column:Descripcion"`
+	NaturalezaDeLaCuenta    *string  `gorm:"column:NaturalezaDeLaCuenta"`
+	TieneSubCuentas         *string  `gorm:"column:TieneSubCuentas"`
+	SaldoInicial            *float64 `gorm:"column:SaldoInicial"`
+	SubTotalDebe            *float64 `gorm:"column:SubTotalDebe"`
+	SubTotalHaber           *float64 `gorm:"column:SubTotalHaber"`
+	Saldo                   *float64 `gorm:"column:Saldo"`
+	ID                      string   `gorm:"column:ID;primaryKey"`
+	SaldoAntesDeCambioSigno *float64 `gorm:"column:SaldoAntesDeCambioSigno"`
+	CodeAux                 string   `gorm:"column:CodeAux;primaryKey"`
+	Grupo                   *string  `gorm:"column:Grupo"`
+	ConsecutivoPeriodo      *int     `gorm:"column:ConsecutivoPeriodo"`
+	GrupoAuxiliar           *string  `gorm:"column:GrupoAuxiliar"`
+	AplicaReconversion      string   `gorm:"column:AplicaReconversion;primaryKey"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (tblSaldoContableTemp) TableName() string {
+	return "tblSaldoContableTemp"
+}
+
+// Transferencia representa la tabla Transferencia de la base de datos
+type Transferencia struct {
+	ConsecutivoCompania       int        `gorm:"column:ConsecutivoCompania;primaryKey"`
+	NumeroDocumento           string     `gorm:"column:NumeroDocumento;primaryKey"`
+	CodigoAlmacenEntrada      *string    `gorm:"column:CodigoAlmacenEntrada"`
+	CodigoAlmacenSalida       *string    `gorm:"column:CodigoAlmacenSalida"`
+	Fecha                     time.Time  `gorm:"column:Fecha"`
+	Comentarios               *string    `gorm:"column:Comentarios"`
+	ConsecutivoAlmacenEntrada int        `gorm:"column:ConsecutivoAlmacenEntrada"`
+	ConsecutivoAlmacenSalida  int        `gorm:"column:ConsecutivoAlmacenSalida"`
+	NombreOperador            *string    `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion   *time.Time `gorm:"column:FechaUltimaModificacion"`
+	FldTimeStamp              time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Transferencia) TableName() string {
+	return "Transferencia"
+}
+
+// Version representa la tabla Version de la base de datos
+type Version struct {
+	FldVersionBDD           string     `gorm:"column:fldVersionBDD;primaryKey"`
+	InitialsOfProgram       string     `gorm:"column:InitialsOfProgram;primaryKey"`
+	DataBaseCurrentVersion  *string    `gorm:"column:DataBaseCurrentVersion"`
+	FldVersionPrograma      string     `gorm:"column:fldVersionPrograma"`
+	FldSiglasPrograma       *string    `gorm:"column:fldSiglasPrograma"`
+	ProgramCurrentVersion   *string    `gorm:"column:ProgramCurrentVersion"`
+	ProgramOldVersion       *string    `gorm:"column:ProgramOldVersion"`
+	FechaUltimaModificacion *time.Time `gorm:"column:FechaUltimaModificacion"`
+	NombreOperador          *string    `gorm:"column:NombreOperador"`
+	FldTimeStamp            time.Time  `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (Version) TableName() string {
+	return "Version"
+}
+
+// VersionLib representa la tabla VersionLib de la base de datos
+type VersionLib struct {
+	InitialsOfProgram string    `gorm:"column:InitialsOfProgram;primaryKey"`
+	InitialsOfProgram string    `gorm:"column:InitialsOfProgram;primaryKey"`
+	CurrentVersion    *string   `gorm:"column:CurrentVersion"`
+	CurrentVersion    *string   `gorm:"column:CurrentVersion"`
+	OldVersion        *string   `gorm:"column:OldVersion"`
+	OldVersion        *string   `gorm:"column:OldVersion"`
+	FldTimeStamp      time.Time `gorm:"column:fldTimeStamp"`
+	FldTimeStamp      time.Time `gorm:"column:fldTimeStamp"`
+}
+
+// TableName especifica el nombre de la tabla para GORM
+func (VersionLib) TableName() string {
+	return "VersionLib"
+}
