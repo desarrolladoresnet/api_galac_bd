@@ -2,10 +2,12 @@ package clientes
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -63,6 +65,130 @@ func ClienteRoutes(api *gin.RouterGroup, db *sql.DB) {
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 
+// Función para construir la consulta de búsqueda de clientes
+func buildClientQuery(rif string, exacta string) (string, string) {
+	busqueda := "="
+	param := rif
+	// La inicial del documento debe ser uno de los siguiente valores
+	if _, ok := map[byte]bool{'V': true, 'G': true, 'J': true, 'E': true}[rif[0]]; !ok || exacta != "si" {
+		// Busqueda aproximada o exacta
+		busqueda = "LIKE"
+		param = "%" + rif + "%"
+	}
+
+	return busqueda, param
+}
+
+///////////////////////////////////////////////////////////////
+
+/*
+Función para obtener el codigo del cliente
+Ejecuta un query en la BD
+Retorna un Slice de Clientes
+*/
+func obtenerCodigosCliente(db *sql.DB, requestID, query string, param string) ([]string, error) {
+	rows, err := db.Query(query, param)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var codigos []string
+	for rows.Next() {
+		var codigo string
+		if err := rows.Scan(&codigo); err != nil {
+			return nil, err
+		}
+		codigos = append(codigos, codigo)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return codigos, nil
+}
+
+///////////////////////////////////////////////////////////////
+
+/*
+Función para obtener detalles completos de clientes
+Ejecuta un query en la BD
+Retorna un Slice de Clientes
+*/
+func obtenerDetallesClientes(db *sql.DB, requestID string, codigos []string) ([]Cliente, error) {
+	// Construir la consulta IN para múltiples códigos
+	codigosPlaceholders := make([]string, len(codigos))
+	for i := range codigos {
+		codigosPlaceholders[i] = fmt.Sprintf("@p%d", i+1)
+	}
+
+	query := `
+        SELECT 
+            ConsecutivoCompania, Consecutivo, Codigo, Nombre, NumeroRIF, NumeroNit, 
+            Direccion, Ciudad, ZonaPostal, Telefono, Fax, Status, Contacto, 
+            ZonaDeCobranza, CodigoVendedor, RazonInactividad, Email, 
+            ActivarAvisoAlEscoger, TextoDelAviso, CuentaContableCxc, 
+            CuentaContableIngresos, CuentaContableAnticipo, InfoGalac, 
+            SectorDeNegocio, CodigoLote, NivelDePrecio, Origen, DiaCumpleanos, 
+            MesCumpleanos, CorrespondenciaXenviar, EsExtranjero, ClienteDesdeFecha, 
+            AQueSeDedicaElCliente, NombreOperador, FechaUltimaModificacion, 
+            TipoDocumentoIdentificacion, TipoDeContribuyente, CampoDefinible1, 
+            ConsecutivoVendedor
+        FROM dbo.Cliente
+        WHERE Codigo IN (` + strings.Join(codigosPlaceholders, ",") + `)
+    `
+
+	// Convertir codigos a interface{}
+	params := make([]interface{}, len(codigos))
+	for i, v := range codigos {
+		params[i] = v
+	}
+
+	rows, err := db.Query(query, params...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var clientes []Cliente
+	for rows.Next() {
+		var cliente Cliente
+		err := rows.Scan(
+			&cliente.ConsecutivoCompania, &cliente.Consecutivo, &cliente.Codigo,
+			&cliente.Nombre, &cliente.NumeroRIF, &cliente.NumeroNit,
+			&cliente.Direccion, &cliente.Ciudad, &cliente.ZonaPostal,
+			&cliente.Telefono, &cliente.Fax, &cliente.Status, &cliente.Contacto,
+			&cliente.ZonaDeCobranza, &cliente.CodigoVendedor,
+			&cliente.RazonInactividad, &cliente.Email,
+			&cliente.ActivarAvisoAlEscoger, &cliente.TextoDelAviso,
+			&cliente.CuentaContableCxc, &cliente.CuentaContableIngresos,
+			&cliente.CuentaContableAnticipo, &cliente.InfoGalac,
+			&cliente.SectorDeNegocio, &cliente.CodigoLote,
+			&cliente.NivelDePrecio, &cliente.Origen, &cliente.DiaCumpleanos,
+			&cliente.MesCumpleanos, &cliente.CorrespondenciaXenviar,
+			&cliente.EsExtranjero, &cliente.ClienteDesdeFecha,
+			&cliente.AQueSeDedicaElCliente, &cliente.NombreOperador,
+			&cliente.FechaUltimaModificacion,
+			&cliente.TipoDocumentoIdentificacion,
+			&cliente.TipoDeContribuyente, &cliente.CampoDefinible1,
+			&cliente.ConsecutivoVendedor,
+		)
+		if err != nil {
+			return nil, err
+		}
+		clientes = append(clientes, cliente)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return clientes, nil
+}
+
+///////////////////////////////////////////////////////////////
+
 /*
 	Permite la obtencion del codigo del cliente.
 	Se debe enviar la CI/RIF en el query.
@@ -74,6 +200,7 @@ func ClienteRoutes(api *gin.RouterGroup, db *sql.DB) {
 	que nos infomarn de documentos de identidad dupplicados.
 */
 
+// Función principal de búsqueda de clientes
 func buscarClientes(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requestTime := time.Now()
@@ -83,6 +210,7 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 		// Obtencion de Querys
 		rif := c.Query("rif")
 		exacta := c.DefaultQuery("exacta", "no")
+		cliente := c.DefaultQuery("cliente", "no")
 
 		// El rif no puede llegar vacio
 		if rif == "" {
@@ -95,31 +223,19 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// -----  Verificacion de parametros de busqueda FIN ----- //
-
 		// -----  Setting del Query ----- //
-
-		busqueda := "="
-		param := rif
-		// La inicial del documento debe ser uno de los siguiente valores
-		if _, ok := map[byte]bool{'V': true, 'G': true, 'J': true, 'E': true}[rif[0]]; !ok || exacta != "si" {
-			// Busqueda aproximada o exacta
-			busqueda = "LIKE"
-			param = "%" + rif + "%"
-		}
+		busqueda, param := buildClientQuery(rif, exacta)
 
 		logError(requestID+" - Iniciando búsqueda de códigos de cliente con RIF: "+rif+" (modo: "+exacta+")", nil)
-
 		query := `
             SELECT Codigo
             FROM dbo.Cliente
             WHERE NumeroRIF ` + busqueda + ` @p1
             ORDER BY FechaUltimaModificacion DESC
         `
-		// -----  Setting del Query FIN ----- //
 
-		// ----- Busqueda de datos ---- //
-		rows, err := db.Query(query, param)
+		// ----- Busqueda de códigos ---- //
+		codigos, err := obtenerCodigosCliente(db, requestID, query, param)
 		if err != nil {
 			logError(requestID+" - Error al consultar los códigos de cliente", err)
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -130,38 +246,8 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			})
 			return
 		}
-		defer rows.Close() // Hay que cerrar la conexion
-		// ----- Busqueda de datos FIN ---- //
 
-		// -----  Setting de la respuesta----- //
-		var codigos []string
-
-		for rows.Next() {
-			var codigo string
-			if err := rows.Scan(&codigo); err != nil {
-				logError(requestID+" - Error al leer el código del cliente", err)
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"message":    "Error al leer los datos del cliente",
-					"error":      err.Error(),
-					"statusCode": http.StatusInternalServerError,
-					"success":    false,
-				})
-				return
-			}
-			codigos = append(codigos, codigo)
-		}
-
-		if err = rows.Err(); err != nil {
-			logError(requestID+" - Error al iterar resultados de códigos", err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"message":    "Error al procesar resultados",
-				"error":      err.Error(),
-				"statusCode": http.StatusInternalServerError,
-				"success":    false,
-			})
-			return
-		}
-
+		// ----- Manejo de resultado de búsqueda ---- //
 		if len(codigos) == 0 {
 			logError(requestID+" - No se encontraron códigos de cliente con RIF: "+rif, nil)
 			c.JSON(http.StatusOK, gin.H{
@@ -172,6 +258,34 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
+		// ----- Procesamiento de respuesta ----- //
+		// Si se solicitan detalles completos de cliente
+		if cliente == "si" {
+			// Obtener detalles completos de clientes
+			clientes, err := obtenerDetallesClientes(db, requestID, codigos)
+			if err != nil {
+				logError(requestID+" - Error al obtener detalles de clientes", err)
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"message":    "Error al obtener detalles de clientes",
+					"error":      err.Error(),
+					"statusCode": http.StatusInternalServerError,
+					"success":    false,
+				})
+				return
+			}
+
+			logError(requestID+" - Búsqueda exitosa. Clientes encontrados: "+strconv.Itoa(len(clientes)), nil)
+			c.JSON(http.StatusOK, gin.H{
+				"message":    "Detalles de clientes encontrados",
+				"data":       clientes,
+				"count":      len(clientes),
+				"statusCode": http.StatusOK,
+				"success":    true,
+			})
+			return
+		}
+
+		// Respuesta por defecto con solo códigos
 		logError(requestID+" - Búsqueda exitosa. Códigos encontrados: "+strconv.Itoa(len(codigos)), nil)
 		c.JSON(http.StatusOK, gin.H{
 			"message":    "Códigos de cliente encontrados",
