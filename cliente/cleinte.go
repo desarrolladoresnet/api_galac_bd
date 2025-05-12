@@ -11,48 +11,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Cliente struct {
-	ConsecutivoCompania         int          `gorm:"column:ConsecutivoCompania;primaryKey"`
-	Consecutivo                 int          `gorm:"column:Consecutivo"`
-	Codigo                      string       `gorm:"column:Codigo;primaryKey"`
-	Nombre                      string       `gorm:"column:Nombre"`
-	NumeroRIF                   *string      `gorm:"column:NumeroRIF"`
-	NumeroNit                   *string      `gorm:"column:NumeroNit"`
-	Direccion                   *string      `gorm:"column:Direccion"`
-	Ciudad                      *string      `gorm:"column:Ciudad"`
-	ZonaPostal                  *string      `gorm:"column:ZonaPostal"`
-	Telefono                    *string      `gorm:"column:Telefono"`
-	Fax                         *string      `gorm:"column:Fax"`
-	Status                      *string      `gorm:"column:Status"`
-	Contacto                    *string      `gorm:"column:Contacto"`
-	ZonaDeCobranza              *string      `gorm:"column:ZonaDeCobranza"`
-	CodigoVendedor              *string      `gorm:"column:CodigoVendedor"`
-	RazonInactividad            *string      `gorm:"column:RazonInactividad"`
-	Email                       *string      `gorm:"column:Email"`
-	ActivarAvisoAlEscoger       string       `gorm:"column:ActivarAvisoAlEscoger"`
-	TextoDelAviso               *string      `gorm:"column:TextoDelAviso"`
-	CuentaContableCxc           *string      `gorm:"column:CuentaContableCxc"`
-	CuentaContableIngresos      *string      `gorm:"column:CuentaContableIngresos"`
-	CuentaContableAnticipo      *string      `gorm:"column:CuentaContableAnticipo"`
-	InfoGalac                   *string      `gorm:"column:InfoGalac"`
-	SectorDeNegocio             *string      `gorm:"column:SectorDeNegocio"`
-	CodigoLote                  *string      `gorm:"column:CodigoLote"`
-	NivelDePrecio               *string      `gorm:"column:NivelDePrecio"`
-	Origen                      *string      `gorm:"column:Origen"`
-	DiaCumpleanos               *int         `gorm:"column:DiaCumpleanos"`
-	MesCumpleanos               *int         `gorm:"column:MesCumpleanos"`
-	CorrespondenciaXenviar      string       `gorm:"column:CorrespondenciaXenviar"`
-	EsExtranjero                string       `gorm:"column:EsExtranjero"`
-	ClienteDesdeFecha           *time.Time   `gorm:"column:ClienteDesdeFecha"`
-	AQueSeDedicaElCliente       *string      `gorm:"column:AQueSeDedicaElCliente"`
-	NombreOperador              *string      `gorm:"column:NombreOperador"`
-	FechaUltimaModificacion     *time.Time   `gorm:"column:FechaUltimaModificacion"`
-	TipoDocumentoIdentificacion *string      `gorm:"column:TipoDocumentoIdentificacion"`
-	TipoDeContribuyente         *string      `gorm:"column:TipoDeContribuyente"`
-	CampoDefinible1             *string      `gorm:"column:CampoDefinible1"`
-	FldTimeStamp                sql.NullTime `gorm:"column:fldTimeStamp"`
-	ConsecutivoVendedor         int          `gorm:"column:ConsecutivoVendedor"`
-}
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+/*
+	Logger Interno para el registro de errores y problemas.
+	Solo se instancia en este modulo y generar el archivo
+	errores_cliente.log
+*/
 
 // Logger para registrar errores en un archivo
 var errorLogger *log.Logger
@@ -60,7 +27,7 @@ var errorLogger *log.Logger
 // Inicializa el logger para errores
 func initErrorLogger() {
 	// Abrir o crear el archivo de log
-	logFile, err := os.OpenFile("errorCliente.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile("errores_cliente.log.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Println("Error al abrir archivo de log de clientes:", err)
 		return
@@ -81,6 +48,10 @@ func logError(mensaje string, err error) {
 	}
 }
 
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
 func ClienteRoutes(api *gin.RouterGroup, db *sql.DB) {
 	// Inicializar el logger de errores
 	initErrorLogger()
@@ -88,14 +59,32 @@ func ClienteRoutes(api *gin.RouterGroup, db *sql.DB) {
 	api.GET("/existe-cliente", buscarClientes(db))
 }
 
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+/*
+	Permite la obtencion del codigo del cliente.
+	Se debe enviar la CI/RIF en el query.
+	Tambien se puede solicitar una busqueda exacta.
+
+	NOTA: Dado las inconsistencia en Galac infomado por
+	el departamento administrativo, este endpoint retorna los
+	resultados en un slice/array/lista de coincidencias, dado
+	que nos infomarn de documentos de identidad dupplicados.
+*/
+
 func buscarClientes(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requestTime := time.Now()
 		requestID := requestTime.Format("20060102150405")
 
+		// -----  Verificacion de parametros de busqueda ----- //
+		// Obtencion de Querys
 		rif := c.Query("rif")
 		exacta := c.DefaultQuery("exacta", "no")
 
+		// El rif no puede llegar vacio
 		if rif == "" {
 			logError(requestID+" - Falta el parámetro RIF", nil)
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -106,9 +95,15 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
+		// -----  Verificacion de parametros de busqueda FIN ----- //
+
+		// -----  Setting del Query ----- //
+
 		busqueda := "="
 		param := rif
+		// La inicial del documento debe ser uno de los siguiente valores
 		if _, ok := map[byte]bool{'V': true, 'G': true, 'J': true, 'E': true}[rif[0]]; !ok || exacta != "si" {
+			// Busqueda aproximada o exacta
 			busqueda = "LIKE"
 			param = "%" + rif + "%"
 		}
@@ -121,7 +116,9 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
             WHERE NumeroRIF ` + busqueda + ` @p1
             ORDER BY FechaUltimaModificacion DESC
         `
+		// -----  Setting del Query FIN ----- //
 
+		// ----- Busqueda de datos ---- //
 		rows, err := db.Query(query, param)
 		if err != nil {
 			logError(requestID+" - Error al consultar los códigos de cliente", err)
@@ -133,8 +130,10 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			})
 			return
 		}
-		defer rows.Close()
+		defer rows.Close() // Hay que cerrar la conexion
+		// ----- Busqueda de datos FIN ---- //
 
+		// -----  Setting de la respuesta----- //
 		var codigos []string
 
 		for rows.Next() {
@@ -182,4 +181,59 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			"success":    true,
 		})
 	}
+}
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+/*
+	El struct representa el modelo extraido de la BD.
+	Se utilizo gorm para realizar la extraccion del modelo
+	pero despues resulto dificil su uso, debido a eso se
+	utilizo otra libreria para la ejecucion del SQL
+	sin embargo se deja todo el codigo como esta,
+*/
+
+type Cliente struct {
+	ConsecutivoCompania         int          `gorm:"column:ConsecutivoCompania;primaryKey"`
+	Consecutivo                 int          `gorm:"column:Consecutivo"`
+	Codigo                      string       `gorm:"column:Codigo;primaryKey"`
+	Nombre                      string       `gorm:"column:Nombre"`
+	NumeroRIF                   *string      `gorm:"column:NumeroRIF"`
+	NumeroNit                   *string      `gorm:"column:NumeroNit"`
+	Direccion                   *string      `gorm:"column:Direccion"`
+	Ciudad                      *string      `gorm:"column:Ciudad"`
+	ZonaPostal                  *string      `gorm:"column:ZonaPostal"`
+	Telefono                    *string      `gorm:"column:Telefono"`
+	Fax                         *string      `gorm:"column:Fax"`
+	Status                      *string      `gorm:"column:Status"`
+	Contacto                    *string      `gorm:"column:Contacto"`
+	ZonaDeCobranza              *string      `gorm:"column:ZonaDeCobranza"`
+	CodigoVendedor              *string      `gorm:"column:CodigoVendedor"`
+	RazonInactividad            *string      `gorm:"column:RazonInactividad"`
+	Email                       *string      `gorm:"column:Email"`
+	ActivarAvisoAlEscoger       string       `gorm:"column:ActivarAvisoAlEscoger"`
+	TextoDelAviso               *string      `gorm:"column:TextoDelAviso"`
+	CuentaContableCxc           *string      `gorm:"column:CuentaContableCxc"`
+	CuentaContableIngresos      *string      `gorm:"column:CuentaContableIngresos"`
+	CuentaContableAnticipo      *string      `gorm:"column:CuentaContableAnticipo"`
+	InfoGalac                   *string      `gorm:"column:InfoGalac"`
+	SectorDeNegocio             *string      `gorm:"column:SectorDeNegocio"`
+	CodigoLote                  *string      `gorm:"column:CodigoLote"`
+	NivelDePrecio               *string      `gorm:"column:NivelDePrecio"`
+	Origen                      *string      `gorm:"column:Origen"`
+	DiaCumpleanos               *int         `gorm:"column:DiaCumpleanos"`
+	MesCumpleanos               *int         `gorm:"column:MesCumpleanos"`
+	CorrespondenciaXenviar      string       `gorm:"column:CorrespondenciaXenviar"`
+	EsExtranjero                string       `gorm:"column:EsExtranjero"`
+	ClienteDesdeFecha           *time.Time   `gorm:"column:ClienteDesdeFecha"`
+	AQueSeDedicaElCliente       *string      `gorm:"column:AQueSeDedicaElCliente"`
+	NombreOperador              *string      `gorm:"column:NombreOperador"`
+	FechaUltimaModificacion     *time.Time   `gorm:"column:FechaUltimaModificacion"`
+	TipoDocumentoIdentificacion *string      `gorm:"column:TipoDocumentoIdentificacion"`
+	TipoDeContribuyente         *string      `gorm:"column:TipoDeContribuyente"`
+	CampoDefinible1             *string      `gorm:"column:CampoDefinible1"`
+	FldTimeStamp                sql.NullTime `gorm:"column:fldTimeStamp"`
+	ConsecutivoVendedor         int          `gorm:"column:ConsecutivoVendedor"`
 }

@@ -11,6 +11,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+/*
+	Logger Interno para el registro de errores y problemas.
+	Solo se instancia en este modulo y generar el archivo
+	errores_facturas.log
+*/
+
 // Logger para registrar errores en un archivo
 var errorLogger *log.Logger
 
@@ -32,10 +42,32 @@ func logError(mensaje string, err error) {
 	}
 }
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
 func Facturas(api *gin.RouterGroup, db *sql.DB) {
 	initErrorLogger()
 	api.GET("/", buscarFacturas(db))
 }
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+/*
+	La funcion permite la busqueda de las facturas en
+	SqlServer, recibe los siguientes parametros de busqueda
+	mediante Querys:
+
+	mes: debe ser numerico entre 1 y  12
+	anio (año): año de busqueda de la factura
+	codigoCliente: alfanumerico
+	page: debe ser numerico o se setea en 1
+	pageZise: debe ser numerico o se setea en 1000, no se
+			  recomienda valores muy altos ya que tiende
+			  a generar fallas en las API
+*/
 
 func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -48,6 +80,8 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		requestTime := time.Now()
 		requestID := requestTime.Format("20060102150405")
 		logError(requestID+" - Iniciando consulta de facturas", nil)
+
+		// ------- Seteo de los parametros de Busqueda ----- //
 
 		// Convertir page y pageSize a int
 		page, err := strconv.Atoi(pageStr)
@@ -113,8 +147,11 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			filterQuery += " AND CodigoCliente = @codigoCliente"
 			params = append(params, sql.Named("codigoCliente", codigoCliente))
 		}
+		// ------- Seteo de los parametros de Busqueda FIN ----- //
 
-		// Obtener el total de registros
+		// ------- Ejecucion de las Busquedas ----- //
+
+		// Obtener el TOTAL DE REGISTROS //
 		countQuery := "SELECT COUNT(*) " + baseQuery + filterQuery
 		var total int
 		err = db.QueryRow(countQuery, params...).Scan(&total)
@@ -127,7 +164,7 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 
 		logError(requestID+" - Total de facturas encontradas: "+strconv.Itoa(total), nil)
 
-		// Consulta principal con paginación
+		// CONSULTA PRINCIPAL //
 		query := `
             SELECT
                 ConsecutivoCompania, Numero, Fecha, CodigoCliente, CodigoVendedor, Observaciones, TotalMontoExento,
@@ -168,7 +205,9 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 		defer rows.Close()
+		// ------- Ejecucion de las Busquedas FIN ----- //
 
+		// ------- Formateo de los resultados ----- //
 		var facturas []Factura
 
 		for rows.Next() {
@@ -215,6 +254,9 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			}
 			facturas = append(facturas, factura)
 		}
+		// ------- Formateo de los resultados FIN ----- //
+
+		// ------- Seteo de la respuesta ----- //
 		totalPages := (total + pageSize - 1) / pageSize
 
 		respuesta := gin.H{
@@ -249,6 +291,18 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		c.JSON(http.StatusOK, respuesta)
 	}
 }
+
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+/*
+	El struct representa el modelo extraido de la BD.
+	Se utilizo gorm para realizar la extraccion del modelo
+	pero despues resulto dificil su uso, debido a eso se
+	utilizo otra libreria para la ejecucion del SQL
+	sin embargo se deja todo el codigo como esta,
+*/
 
 type Factura struct {
 	ConsecutivoCompania               int        `gorm:"column:ConsecutivoCompania;primaryKey"`

@@ -13,13 +13,25 @@ import (
 	_ "github.com/microsoft/go-mssqldb"
 )
 
+/*
+	La presente es un API sencilla que cuya funcion es la
+	de leer los datos de la BD SQLServer de Galac y enviarlos
+	fuera del servidor.
+	Hasta el presente (Mayo 2025) no realiza nminguna otra funcion
+	que no sea lectura, por lo que el usuario de la API debe solo tener
+	permisos de lectura, no se recomienda la escritura tanto por motivos
+	de la legislacion presente en cuanto a los softwares de contabilidad
+	como la compatibilidad del Galac.
+
+*/
+
 func main() {
 	// Configuración de conexión
 	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s;TrustServerCertificate=true;",
-		"WIN-754KG2T0CQI\\GALACSQLX17",
-		"userdb",
-		"123456",
-		"SAWDB",
+		"WIN-754KG2T0CQI\\GALACSQLX17", // Server BD
+		"userdb",                       // Usuario
+		"123456",                       // Pass del Usuario (generar pass seguro)
+		"SAWDB",                        // BD
 	)
 
 	// Establecer conexión
@@ -53,9 +65,11 @@ func main() {
 		c.String(200, "Hello World")
 	})
 
+	// Rutas para obtencion de facturas
 	api_facturas := router.Group("facturas")
 	facturas.Facturas(api_facturas, db)
 
+	// Rutas para obtencion de clientes
 	api_clientes := router.Group("clientes")
 	clientes.ClienteRoutes(api_clientes, db)
 	// Iniciar servidor
