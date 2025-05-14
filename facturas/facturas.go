@@ -76,6 +76,7 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		codigoCliente := c.Query("codigoCliente") // <-- NUEVO
 		pageStr := c.DefaultQuery("page", "1")
 		pageSizeStr := c.DefaultQuery("pageSize", "1000")
+		odooQuery := c.Query("odoo")
 
 		requestTime := time.Now()
 		requestID := requestTime.Format("20060102150405")
@@ -107,6 +108,7 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		var mes, anio int
 		var hayFiltroFecha bool
 
+		// ------ Busqueda por Año y Mes ------ //
 		if mesStr != "" {
 			mes, err = strconv.Atoi(mesStr)
 			if err != nil || mes < 1 || mes > 12 {
@@ -128,6 +130,7 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			}
 			hayFiltroFecha = true
 		}
+	
 
 		if hayFiltroFecha {
 			if mesStr != "" && anioStr != "" {
@@ -140,6 +143,13 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 				filterQuery += " AND YEAR(Fecha) = @anio"
 				params = append(params, sql.Named("anio", anio))
 			}
+		}
+
+		// ----- Busca por campo observacion ------ //
+		// Jembi lo quiere porque aqui colocan el Codigo SUB de Odoo
+		if odooQuery != "" {
+		    filterQuery += " AND Observaciones LIKE @odoo"
+		    params = append(params, sql.Named("odoo", "%"+odooQuery+"%"))
 		}
 
 		// NUEVO: filtro por CodigoCliente si viene en la query
@@ -277,6 +287,13 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 				"mes":  mes,
 				"anio": anio,
 			}
+		}
+
+		if odooQuery != "" {
+		    if respuesta["filtros"] == nil {
+		        respuesta["filtros"] = map[string]interface{}{}
+		    }
+		    respuesta["filtros"].(map[string]interface{})["odoo"] = odooQuery
 		}
 
 		if codigoCliente != "" {
