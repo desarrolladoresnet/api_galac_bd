@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -56,18 +57,42 @@ func Facturas(api *gin.RouterGroup, db *sql.DB) {
 ////////////////////////////////////////////////////////
 
 /*
-	La funcion permite la busqueda de las facturas en
-	SqlServer, recibe los siguientes parametros de busqueda
-	mediante Querys:
+La funcion permite la busqueda de las facturas en
+SqlServer, recibe los siguientes parametros de busqueda
+mediante Querys:
 
-	mes: debe ser numerico entre 1 y  12
-	anio (año): año de busqueda de la factura
-	codigoCliente: alfanumerico
-	page: debe ser numerico o se setea en 1
-	pageZise: debe ser numerico o se setea en 1000, no se
-			  recomienda valores muy altos ya que tiende
-			  a generar fallas en las API
+mes: debe ser numerico entre 1 y  12
+anio (año): año de busqueda de la factura
+codigoCliente: alfanumerico
+page: debe ser numerico o se setea en 1
+pageZise: debe ser numerico o se setea en 1000, no se
+
+	recomienda valores muy altos ya que tiende
+	a generar fallas en las API
 */
+var meses = map[string]string{
+	"ENERO":      "1",
+	"FEBRERO":    "2",
+	"MARZO":      "3",
+	"ABRIL":      "4",
+	"MAYO":       "5",
+	"JUNIO":      "6",
+	"JULIO":      "7",
+	"AGOSTO":     "8",
+	"SEPTIEMBRE": "9",
+	"OCTUBRE":    "10",
+	"NOVIEMBRE":  "11",
+	"DICIEMBRE":  "12",
+}
+
+var estadosFactura = map[string]string{
+	"EMITIDA":      "0",
+	"BORRADOR":     "2",
+	"NOTA_CREDITO": "1",
+	"0":            "0",
+	"2":            "2",
+	"1":            "1",
+}
 
 func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -77,6 +102,8 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		pageStr := c.DefaultQuery("page", "1")
 		pageSizeStr := c.DefaultQuery("pageSize", "1000")
 		odooQuery := c.Query("odoo")
+		mesNombre := strings.ToUpper(c.Query("mesNombre"))         // Ejemplo: "ABRIL"
+		estadoFactura := strings.ToUpper(c.Query("estadoFactura")) // 0 = Emitida, 2 = Borrador, 1 = Nota de Credito en status Factura
 
 		requestTime := time.Now()
 		requestID := requestTime.Format("20060102150405")
@@ -108,6 +135,39 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		var mes, anio int
 		var hayFiltroFecha bool
 
+		// ------ Busqueda por Estado de Factura ------ //
+		if estadoFactura != "" {
+			// Verificar si el estado es válido (número o nombre)
+			codigoEstado, ok := estadosFactura[estadoFactura]
+			if !ok {
+				mensaje := "Estado de factura inválido. Use: 0 (EMITIDA), 2 (BORRADOR), 1 (NOTA_CREDITO) o sus nombres"
+				logError(requestID+" - "+mensaje, nil)
+				estadoFactura = ""
+			}
+
+			// Agregar filtro para buscar por estado
+			filterQuery += " AND StatusFactura = @estadoFactura"
+			params = append(params, sql.Named("estadoFactura", codigoEstado))
+		}
+
+		// ------ Busqueda por Nombre de Mes en Observaciones ------ //
+		if mesNombre != "" {
+			// Verificar si el nombre del mes es válido
+			if _, ok := meses[mesNombre]; !ok {
+				mensaje := "Nombre de mes inválido. Use: ENERO, FEBRERO, ..., DICIEMBRE"
+				logError(requestID+" - "+mensaje, nil)
+				mesNombre = "" // Si el mes no es valido, se deja vacio el campo
+			}
+
+			// Agregar filtro para buscar el mes en observaciones
+			filterQuery += " AND Observaciones LIKE @mesObs"
+			params = append(params, sql.Named("mesObs", "%"+mesNombre+"%"))
+
+			// Si quieres buscar exactamente el patrón "MES-Suscripcion:"
+			// filterQuery += " AND Observaciones LIKE @mesObs"
+			// params = append(params, sql.Named("mesObs", "%"+mesNombre+"-Suscripcion:%"))
+		}
+
 		// ------ Busqueda por Año y Mes ------ //
 		if mesStr != "" {
 			mes, err = strconv.Atoi(mesStr)
@@ -130,7 +190,6 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			}
 			hayFiltroFecha = true
 		}
-	
 
 		if hayFiltroFecha {
 			if mesStr != "" && anioStr != "" {
@@ -148,8 +207,8 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		// ----- Busca por campo observacion ------ //
 		// Jembi lo quiere porque aqui colocan el Codigo SUB de Odoo
 		if odooQuery != "" {
-		    filterQuery += " AND Observaciones LIKE @odoo"
-		    params = append(params, sql.Named("odoo", "%"+odooQuery+"%"))
+			filterQuery += " AND Observaciones LIKE @odoo"
+			params = append(params, sql.Named("odoo", "%"+odooQuery+"%"))
 		}
 
 		// NUEVO: filtro por CodigoCliente si viene en la query
@@ -281,6 +340,19 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 			"hasPrevPage": page > 1,
 			"data":        facturas,
 		}
+		if estadoFactura != "" {
+			if respuesta["filtros"] == nil {
+				respuesta["filtros"] = map[string]interface{}{}
+			}
+			respuesta["filtros"].(map[string]interface{})["estadoFactura"] = estadoFactura
+		}
+
+		if mesNombre != "" {
+			if respuesta["filtros"] == nil {
+				respuesta["filtros"] = map[string]interface{}{}
+			}
+			respuesta["filtros"].(map[string]interface{})["mesNombre"] = mesNombre
+		}
 
 		if hayFiltroFecha {
 			respuesta["filtros"] = map[string]interface{}{
@@ -290,10 +362,10 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		}
 
 		if odooQuery != "" {
-		    if respuesta["filtros"] == nil {
-		        respuesta["filtros"] = map[string]interface{}{}
-		    }
-		    respuesta["filtros"].(map[string]interface{})["odoo"] = odooQuery
+			if respuesta["filtros"] == nil {
+				respuesta["filtros"] = map[string]interface{}{}
+			}
+			respuesta["filtros"].(map[string]interface{})["odoo"] = odooQuery
 		}
 
 		if codigoCliente != "" {
@@ -439,3 +511,4 @@ type Factura struct {
 	ConsecutivoVendedor               int        `gorm:"column:ConsecutivoVendedor"`
 	ImprentaDigitalGUID               *string    `gorm:"column:ImprentaDigitalGUID"`
 }
+
