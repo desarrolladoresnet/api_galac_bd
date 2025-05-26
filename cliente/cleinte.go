@@ -211,31 +211,49 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 		rif := c.Query("rif")
 		exacta := c.DefaultQuery("exacta", "no")
 		cliente := c.DefaultQuery("cliente", "no")
+		codigo := c.Query("codigo") // Nota: cambié "Codigo" a minúsculas para consistencia
 
-		// El rif no puede llegar vacio
-		if rif == "" {
-			logError(requestID+" - Falta el parámetro RIF", nil)
+		// Verificar que al menos uno de los parámetros (rif o codigo) esté presente
+		if rif == "" && codigo == "" {
+			logError(requestID+" - Falta el parámetro RIF o Código", nil)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"message":    "Falta el RIF a buscar",
+				"message":    "Falta el RIF o Código a buscar",
 				"statusCode": http.StatusBadRequest,
 				"success":    false,
 			})
 			return
 		}
 
-		// -----  Setting del Query ----- //
-		busqueda, param := buildClientQuery(rif, exacta)
+		var query string
+		var param string
+		var err error
+		var codigos []string
 
-		logError(requestID+" - Iniciando búsqueda de códigos de cliente con RIF: "+rif+" (modo: "+exacta+")", nil)
-		query := `
-            SELECT Codigo
-            FROM dbo.Cliente
-            WHERE NumeroRIF ` + busqueda + ` @p1
-            ORDER BY FechaUltimaModificacion DESC
-        `
+		// -----  Setting del Query ----- //
+		if codigo != "" {
+			// Búsqueda por código de cliente (siempre exacta)
+			logError(requestID+" - Iniciando búsqueda de cliente por código: "+codigo, nil)
+			query = `
+				SELECT Codigo
+				FROM dbo.Cliente
+				WHERE Codigo = @p1
+				ORDER BY FechaUltimaModificacion DESC
+			`
+			param = codigo
+		} else {
+			// Búsqueda por RIF (como antes)
+			logError(requestID+" - Iniciando búsqueda de códigos de cliente con RIF: "+rif+" (modo: "+exacta+")", nil)
+			query, param = buildClientQuery(rif, exacta)
+			query = `
+				SELECT Codigo
+				FROM dbo.Cliente
+				WHERE NumeroRIF ` + query + ` @p1
+				ORDER BY FechaUltimaModificacion DESC
+			`
+		}
 
 		// ----- Busqueda de códigos ---- //
-		codigos, err := obtenerCodigosCliente(db, requestID, query, param)
+		codigos, err = obtenerCodigosCliente(db, requestID, query, param)
 		if err != nil {
 			logError(requestID+" - Error al consultar los códigos de cliente", err)
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -247,9 +265,10 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
+		// Resto del código permanece igual...
 		// ----- Manejo de resultado de búsqueda ---- //
 		if len(codigos) == 0 {
-			logError(requestID+" - No se encontraron códigos de cliente con RIF: "+rif, nil)
+			logError(requestID+" - No se encontraron códigos de cliente", nil)
 			c.JSON(http.StatusOK, gin.H{
 				"message":    "No se encontraron códigos de cliente",
 				"statusCode": http.StatusOK,
