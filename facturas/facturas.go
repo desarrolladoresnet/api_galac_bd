@@ -104,10 +104,14 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		odooQuery := c.Query("odoo")
 		mesNombre := strings.ToUpper(c.Query("mesNombre"))         // Ejemplo: "ABRIL"
 		estadoFactura := strings.ToUpper(c.Query("estadoFactura")) // 0 = Emitida, 2 = Borrador, 1 = Nota de Credito en status Factura
+		numeroControl := strings.ToLower(c.Query("numeroControl")) // Convertir a minúsculas para comparación
 
 		requestTime := time.Now()
 		requestID := requestTime.Format("20060102150405")
 		logError(requestID+" - Iniciando consulta de facturas", nil)
+
+		// Verificar si solo se quieren números de control
+		soloNumerosControl := numeroControl == "si" || numeroControl == "true"
 
 		// ------- Seteo de los parametros de Busqueda ----- //
 
@@ -233,36 +237,50 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 
 		logError(requestID+" - Total de facturas encontradas: "+strconv.Itoa(total), nil)
 
-		// CONSULTA PRINCIPAL //
-		query := `
-            SELECT
-                ConsecutivoCompania, Numero, Fecha, CodigoCliente, CodigoVendedor, Observaciones, TotalMontoExento,
-                TotalBaseImponible, TotalRenglones, TotalIVA, TotalFactura, PorcentajeDescuento, CodigoNota1,
-                CodigoNota2, Moneda, NivelDePrecio, ReservarMercancia, FechaDeRetiro, CodigoAlmacen, StatusFactura,
-                TipoDeDocumento, InsertadaManualmente, FacturaHistorica, Cancelada, UsarDireccionFiscal,
-                NoDirDespachoAimprimir, CambioABolivares, MontoDelAbono, FechaDeVencimiento, CondicionesDePago,
-                FormaDeLaInicial, PorcentajeDeLaInicial, NumeroDeCuotas, MontoDeLasCuotas, MontoUltimaCuota,
-                Talonario, FormaDePago, NumDiasDeVencimiento1aCuota, EditarMontoCuota, NumeroControl,
-                TipoDeTransaccion, NumeroFacturaAfectada, NumeroPlanillaExportacion, TipoDeVenta, UsaMaquinaFiscal,
-                CodigoMaquinaRegistradora, NumeroDesde, NumeroHasta, NumeroControlHasta, MontoIvaRetenido,
-                FechaAplicacionRetIVA, NumeroComprobanteRetIVA, FechaComprobanteRetIVA, SeRetuvoIVA,
-                FacturaConPreciosSinIva, VueltoDelCobroDirecto, ConsecutivoCaja, GeneraCobroDirecto,
-                FechaDeFacturaAfectada, FechaDeEntrega, PorcentajeDescuento1, PorcentajeDescuento2,
-                MontoDescuento1, MontoDescuento2, CodigoLote, Devolucion, PorcentajeAlicuota1, PorcentajeAlicuota2,
-                PorcentajeAlicuota3, MontoIVAAlicuota1, MontoIVAAlicuota2, MontoIVAAlicuota3, MontoGravableAlicuota1,
-                MontoGravableAlicuota2, MontoGravableAlicuota3, RealizoCierreZ, NumeroComprobanteFiscal,
-                SerialMaquinaFiscal, AplicarPromocion, RealizoCierreX, HoraModificacion, FormaDeCobro,
-                OtraFormaDeCobro, NoCotizacionDeOrigen, NoContrato, ConsecutivoVehiculo, ConsecutivoAlmacen,
-                NumeroResumenDiario, NoControlDespachoDeOrigen, ImprimeFiscal, EsDiferida, EsOriginalmenteDiferida,
-                SeContabilizoIvaDiferido, AplicaDecretoIvaEspecial, EsGeneradaPorPuntoDeVenta, CambioMonedaCXC,
-                CambioMostrarTotalEnDivisas, CodigoMonedaDeCobro, GeneradaPorNotaEntrega, EmitidaEnFacturaNumero,
-                CodigoMoneda, NombreOperador, FechaUltimaModificacion, NumeroParaResumen, NroDiasMantenerCambioAMonedaLocal,
-                FechaLimiteCambioAMonedaLocal, GeneradoPor, BaseImponibleIGTF, IGTFML, IGTFME, AlicuotaIGTF,
-                MotivoDeAnulacion, ProveedorImprentaDigital, ConsecutivoVendedor, ImprentaDigitalGUID
+		// CONSULTA PRINCIPAL - Modificada según si solo queremos números de control
+		var query string
+		if soloNumerosControl {
+			// Solo seleccionar NumeroControl
+			query = `
+                SELECT DISTINCT NumeroControl
             ` + baseQuery + filterQuery + `
-            ORDER BY Fecha DESC
-            OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY
-        `
+                AND NumeroControl IS NOT NULL 
+                AND NumeroControl != ''
+                ORDER BY NumeroControl
+                OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY
+            `
+		} else {
+			// Consulta completa original
+			query = `
+                SELECT
+                    ConsecutivoCompania, Numero, Fecha, CodigoCliente, CodigoVendedor, Observaciones, TotalMontoExento,
+                    TotalBaseImponible, TotalRenglones, TotalIVA, TotalFactura, PorcentajeDescuento, CodigoNota1,
+                    CodigoNota2, Moneda, NivelDePrecio, ReservarMercancia, FechaDeRetiro, CodigoAlmacen, StatusFactura,
+                    TipoDeDocumento, InsertadaManualmente, FacturaHistorica, Cancelada, UsarDireccionFiscal,
+                    NoDirDespachoAimprimir, CambioABolivares, MontoDelAbono, FechaDeVencimiento, CondicionesDePago,
+                    FormaDeLaInicial, PorcentajeDeLaInicial, NumeroDeCuotas, MontoDeLasCuotas, MontoUltimaCuota,
+                    Talonario, FormaDePago, NumDiasDeVencimiento1aCuota, EditarMontoCuota, NumeroControl,
+                    TipoDeTransaccion, NumeroFacturaAfectada, NumeroPlanillaExportacion, TipoDeVenta, UsaMaquinaFiscal,
+                    CodigoMaquinaRegistradora, NumeroDesde, NumeroHasta, NumeroControlHasta, MontoIvaRetenido,
+                    FechaAplicacionRetIVA, NumeroComprobanteRetIVA, FechaComprobanteRetIVA, SeRetuvoIVA,
+                    FacturaConPreciosSinIva, VueltoDelCobroDirecto, ConsecutivoCaja, GeneraCobroDirecto,
+                    FechaDeFacturaAfectada, FechaDeEntrega, PorcentajeDescuento1, PorcentajeDescuento2,
+                    MontoDescuento1, MontoDescuento2, CodigoLote, Devolucion, PorcentajeAlicuota1, PorcentajeAlicuota2,
+                    PorcentajeAlicuota3, MontoIVAAlicuota1, MontoIVAAlicuota2, MontoIVAAlicuota3, MontoGravableAlicuota1,
+                    MontoGravableAlicuota2, MontoGravableAlicuota3, RealizoCierreZ, NumeroComprobanteFiscal,
+                    SerialMaquinaFiscal, AplicarPromocion, RealizoCierreX, HoraModificacion, FormaDeCobro,
+                    OtraFormaDeCobro, NoCotizacionDeOrigen, NoContrato, ConsecutivoVehiculo, ConsecutivoAlmacen,
+                    NumeroResumenDiario, NoControlDespachoDeOrigen, ImprimeFiscal, EsDiferida, EsOriginalmenteDiferida,
+                    SeContabilizoIvaDiferido, AplicaDecretoIvaEspecial, EsGeneradaPorPuntoDeVenta, CambioMonedaCXC,
+                    CambioMostrarTotalEnDivisas, CodigoMonedaDeCobro, GeneradaPorNotaEntrega, EmitidaEnFacturaNumero,
+                    CodigoMoneda, NombreOperador, FechaUltimaModificacion, NumeroParaResumen, NroDiasMantenerCambioAMonedaLocal,
+                    FechaLimiteCambioAMonedaLocal, GeneradoPor, BaseImponibleIGTF, IGTFML, IGTFME, AlicuotaIGTF,
+                    MotivoDeAnulacion, ProveedorImprentaDigital, ConsecutivoVendedor, ImprentaDigitalGUID
+             ` + baseQuery + filterQuery + `
+                ORDER BY Fecha DESC
+                OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY
+            `
+		}
 
 		params = append(params, sql.Named("offset", offset), sql.Named("pageSize", pageSize))
 
@@ -277,6 +295,64 @@ func buscarFacturas(db *sql.DB) gin.HandlerFunc {
 		// ------- Ejecucion de las Busquedas FIN ----- //
 
 		// ------- Formateo de los resultados ----- //
+		if soloNumerosControl {
+			// Solo números de control
+			var numerosControl []string
+
+			for rows.Next() {
+				var numeroCtrl string
+				err := rows.Scan(&numeroCtrl)
+				if err != nil {
+					mensaje := "Error al leer números de control"
+					logError(requestID+" - "+mensaje, err)
+					c.JSON(http.StatusInternalServerError, gin.H{"error": mensaje + ": " + err.Error()})
+					return
+				}
+				numerosControl = append(numerosControl, numeroCtrl)
+			}
+
+			// Respuesta simplificada para números de control
+			totalPages := (total + pageSize - 1) / pageSize
+			respuesta := gin.H{
+				"count":       len(numerosControl),
+				"total":       total,
+				"page":        page,
+				"pageSize":    pageSize,
+				"totalPages":  totalPages,
+				"isFirstPage": page == 1,
+				"isLastPage":  page == totalPages,
+				"hasNextPage": page < totalPages,
+				"hasPrevPage": page > 1,
+				"data":        numerosControl, // Array de strings en lugar de objetos
+			}
+
+			// Agregar filtros aplicados
+			if estadoFactura != "" || mesNombre != "" || hayFiltroFecha || odooQuery != "" || codigoCliente != "" {
+				respuesta["filtros"] = map[string]interface{}{}
+				if estadoFactura != "" {
+					respuesta["filtros"].(map[string]interface{})["estadoFactura"] = estadoFactura
+				}
+				if mesNombre != "" {
+					respuesta["filtros"].(map[string]interface{})["mesNombre"] = mesNombre
+				}
+				if hayFiltroFecha {
+					respuesta["filtros"].(map[string]interface{})["mes"] = mes
+					respuesta["filtros"].(map[string]interface{})["anio"] = anio
+				}
+				if odooQuery != "" {
+					respuesta["filtros"].(map[string]interface{})["odoo"] = odooQuery
+				}
+				if codigoCliente != "" {
+					respuesta["filtros"].(map[string]interface{})["codigoCliente"] = codigoCliente
+				}
+			}
+
+			logError(requestID+" - Consulta completada (solo números de control). Página: "+strconv.Itoa(page)+", Números devueltos: "+strconv.Itoa(len(numerosControl))+" / "+strconv.Itoa(total), nil)
+			c.JSON(http.StatusOK, respuesta)
+			return
+		}
+
+		// Lógica original para facturas completas
 		var facturas []Factura
 
 		for rows.Next() {
@@ -511,4 +587,3 @@ type Factura struct {
 	ConsecutivoVendedor               int        `gorm:"column:ConsecutivoVendedor"`
 	ImprentaDigitalGUID               *string    `gorm:"column:ImprentaDigitalGUID"`
 }
-
