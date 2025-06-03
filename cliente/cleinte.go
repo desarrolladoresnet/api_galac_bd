@@ -82,6 +82,60 @@ func buildClientQuery(rif string, exacta string) (string, string) {
 ///////////////////////////////////////////////////////////////
 
 /*
+Función para obtener información básica de clientes (código, nombre, email, teléfono)
+Ejecuta un query en la BD
+Retorna un Slice de ClienteBasico
+*/
+func obtenerClientesBasicos(db *sql.DB, requestID string, codigos []string) ([]ClienteBasico, error) {
+	// Construir la consulta IN para múltiples códigos
+	codigosPlaceholders := make([]string, len(codigos))
+	for i := range codigos {
+		codigosPlaceholders[i] = fmt.Sprintf("@p%d", i+1)
+	}
+
+	query := `
+        SELECT 
+            Codigo, Nombre, Email, Telefono
+        FROM dbo.Cliente
+        WHERE Codigo IN (` + strings.Join(codigosPlaceholders, ",") + `)
+		ORDER BY FechaUltimaModificacion DESC
+    `
+
+	// Convertir codigos a interface{}
+	params := make([]interface{}, len(codigos))
+	for i, v := range codigos {
+		params[i] = v
+	}
+
+	rows, err := db.Query(query, params...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var clientes []ClienteBasico
+	for rows.Next() {
+		var cliente ClienteBasico
+		err := rows.Scan(
+			&cliente.Codigo,
+			&cliente.Nombre,
+			&cliente.Email,
+			&cliente.Telefono,
+		)
+		if err != nil {
+			return nil, err
+		}
+		clientes = append(clientes, cliente)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return clientes, nil
+}
+
+/*
 Función para obtener el codigo del cliente
 Ejecuta un query en la BD
 Retorna un Slice de Clientes
@@ -137,6 +191,7 @@ func obtenerDetallesClientes(db *sql.DB, requestID string, codigos []string) ([]
             ConsecutivoVendedor
         FROM dbo.Cliente
         WHERE Codigo IN (` + strings.Join(codigosPlaceholders, ",") + `)
+		ORDER BY FechaUltimaModificacion DESC
     `
 
 	// Convertir codigos a interface{}
@@ -243,13 +298,14 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 		} else {
 			// Búsqueda por RIF (como antes)
 			logError(requestID+" - Iniciando búsqueda de códigos de cliente con RIF: "+rif+" (modo: "+exacta+")", nil)
-			query, param = buildClientQuery(rif, exacta)
+			busqueda, paramBusqueda := buildClientQuery(rif, exacta)
 			query = `
 				SELECT Codigo
 				FROM dbo.Cliente
-				WHERE NumeroRIF ` + query + ` @p1
+				WHERE NumeroRIF ` + busqueda + ` @p1
 				ORDER BY FechaUltimaModificacion DESC
 			`
+			param = paramBusqueda
 		}
 
 		// ----- Busqueda de códigos ---- //
@@ -265,7 +321,6 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Resto del código permanece igual...
 		// ----- Manejo de resultado de búsqueda ---- //
 		if len(codigos) == 0 {
 			logError(requestID+" - No se encontraron códigos de cliente", nil)
@@ -304,12 +359,24 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Respuesta por defecto con solo códigos
-		logError(requestID+" - Búsqueda exitosa. Códigos encontrados: "+strconv.Itoa(len(codigos)), nil)
+		// Respuesta con información básica (código, nombre, email, teléfono)
+		clientesBasicos, err := obtenerClientesBasicos(db, requestID, codigos)
+		if err != nil {
+			logError(requestID+" - Error al obtener información básica de clientes", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"message":    "Error al obtener información básica de clientes",
+				"error":      err.Error(),
+				"statusCode": http.StatusInternalServerError,
+				"success":    false,
+			})
+			return
+		}
+
+		logError(requestID+" - Búsqueda exitosa. Clientes básicos encontrados: "+strconv.Itoa(len(clientesBasicos)), nil)
 		c.JSON(http.StatusOK, gin.H{
-			"message":    "Códigos de cliente encontrados",
-			"data":       codigos,
-			"count":      len(codigos),
+			"message":    "Información básica de clientes encontrada",
+			"data":       clientesBasicos,
+			"count":      len(clientesBasicos),
 			"statusCode": http.StatusOK,
 			"success":    true,
 		})
@@ -319,6 +386,17 @@ func buscarClientes(db *sql.DB) gin.HandlerFunc {
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
+
+/*
+Struct para información básica del cliente
+Contiene solo los campos esenciales: código, nombre, email y teléfono
+*/
+type ClienteBasico struct {
+	Codigo   string  `json:"codigo"`
+	Nombre   string  `json:"nombre"`
+	Email    *string `json:"email"`
+	Telefono *string `json:"telefono"`
+}
 
 /*
 	El struct representa el modelo extraido de la BD.
